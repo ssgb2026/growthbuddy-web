@@ -1,0 +1,17 @@
+:root{
+  /* Colour */
+  --paper:#FAF4EA; --card:#ECE4D5; --tile:#FCF9F2; --hairline:#E7DCC8;
+  --charcoal:#181A1F; --grey-ink:#5E6269;
+  --clay:#B96B4D; --clay-dark:#9E5740; --forest:#214E3F; --soft-yellow:#F4D58D;
+
+  /* Type */
+  --font-display:"Libre Baskerville", Georgia, serif;
+  --font-body:"Inter", system-ui, sans-serif;
+  --font-label:"Space Grotesk", system-ui, sans-serif;
+  --tracking-display:-0.07em;          /* locked, ALL Libre Baskerville */
+
+  /* Space / layout */
+  --radius-card:20px;
+  --pad-section-y:120px; --pad-section-y-m:72px;
+  --maxw:1200px; --maxw-wide:1280px; --gutter:24px; --gutter-m:20px;
+}
