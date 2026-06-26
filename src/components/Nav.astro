@@ -3,16 +3,34 @@
   Site navigation (design-system §B.1, matched to "Fold 1 – Hero.html").
   - Transparent over the gold hero; turns glass + gains --gb-shadow-nav and
     reveals the CTA once scrolled past 8px (.scrolled).
-  - Mega-menus (Roles / Industries / Resources) are Sanity-driven and deferred
-    to a later phase; rendered as plain links for now.
-  - One small island (idle-loaded vanilla script) drives the ≤980px mobile
-    sheet + the scrolled state. Keyboard-operable, closes on Esc / outside
-    click / resize; motion is governed by the global reduced-motion rule.
+  - Mega-menus: Roles (two-panel), Industries (2-col dot links), Resources
+    (two labelled columns). Open on hover / focus-within / click; close on Esc,
+    outside-click and resize. The Roles category rail swaps the sub-role panel
+    on hover/focus.
+  - ≤980px the links collapse into the burger sheet (mega triggers become plain
+    links). One idle-loaded island drives the sheet, scrolled state + megas.
+
+  DATA NOTE: the mock binds Roles/Industries to Sanity ({{ roleCats }},
+  {{ industries }}) — that list data is NOT in the mock file. The roleCats /
+  industries below are PLACEHOLDER stand-ins (categories are the CLAUDE.md
+  `function` set) so the menus render; replace with Sanity + real
+  /hire/[slug] · /industries/[slug] URLs. Resources content IS from the mock.
 */
-const links = [
+const slug = (s: string) =>
+  s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const roleCats = [
+  { label: 'Marketing', roles: ['Growth Marketer', 'Content Strategist', 'SEO Specialist', 'Social Media Manager', 'Performance Marketer', 'Brand Designer', 'Email Marketer', 'Marketing Operations'] },
+  { label: 'Sales', roles: ['Sales Development Rep', 'Account Executive', 'Sales Operations', 'Partnerships Manager', 'Customer Success Manager', 'Revenue Analyst'] },
+  { label: 'Operations', roles: ['Operations Manager', 'Project Manager', 'Executive Assistant', 'Data Analyst', 'Customer Support Lead', 'Process Specialist'] },
+  { label: 'Finance', roles: ['Bookkeeper', 'Financial Analyst', 'Accounts Payable Clerk', 'FP&A Analyst', 'Controller', 'Payroll Specialist'] },
+];
+const industries = ['SaaS & Technology', 'E-commerce & Retail', 'Healthcare', 'Real estate', 'Marketing agencies', 'Financial services', 'Professional services', 'Manufacturing'];
+
+const mobileLinks = [
   { label: 'How it works', href: '#how-it-works' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Roles', href: '#roles' },
+  { label: 'Roles', href: '/hire' },
   { label: 'Industries', href: '/industries' },
   { label: 'Resources', href: '/resources' },
 ];
@@ -24,9 +42,66 @@ const links = [
     </a>
 
     <ul class="nav-links">
-      {links.map((l) => (
-        <li class="nav-item"><a class="nav-link" href={l.href}>{l.label}</a></li>
-      ))}
+      <li class="nav-item"><a class="nav-link" href="#how-it-works">How it works</a></li>
+      <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+
+      <li class="nav-item has-mega" data-mega="roles">
+        <button class="nav-link" type="button" aria-haspopup="true" aria-expanded="false">Roles<svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="mega mega-roles">
+          <div class="mega-card">
+            <div class="mega-roles-cats" role="tablist" aria-label="Role categories">
+              {roleCats.map((c, i) => (
+                <button class="cat" type="button" role="tab" data-cat={slug(c.label)} data-active={i === 0 ? 'true' : 'false'} aria-selected={i === 0 ? 'true' : 'false'}>{c.label}<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+              ))}
+            </div>
+            <div class="mega-roles-sub">
+              {roleCats.map((c, i) => (
+                <div class="mega-sub" data-cat={slug(c.label)} hidden={i !== 0}>
+                  <div class="mega-label">{c.label}</div>
+                  <div class="mega-sub-grid">
+                    {c.roles.map((r) => (<a class="subrole" href={`/hire/${slug(r)}`}>{r}</a>))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item has-mega" data-mega="industries">
+        <button class="nav-link" type="button" aria-haspopup="true" aria-expanded="false">Industries<svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="mega mega-ind">
+          <div class="mega-card">
+            <div class="mega-label">By industry</div>
+            <div class="mega-ind-grid">
+              {industries.map((ind) => (
+                <a class="indlink" href={`/industries/${slug(ind)}`}><span class="inddot" aria-hidden="true"></span>{ind}</a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item has-mega" data-mega="resources">
+        <button class="nav-link" type="button" aria-haspopup="true" aria-expanded="false">Resources<svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="mega mega-res">
+          <div class="mega-card">
+            <div class="res-col">
+              <div class="mega-label">Learn</div>
+              <a class="reslink" href="/blog">Blog<small>Hiring insights &amp; playbooks</small></a>
+              <a class="reslink" href="/guides">Guides<small>Build your global team</small></a>
+              <a class="reslink" href="/case-studies">Case studies<small>How teams scale with us</small></a>
+            </div>
+            <div class="res-col">
+              <div class="mega-label">Company</div>
+              <a class="reslink" href="/about">About us</a>
+              <a class="reslink" href="#how-it-works">How it works</a>
+              <a class="reslink" href="/careers">Careers</a>
+              <a class="reslink" href="/contact">Contact</a>
+            </div>
+          </div>
+        </div>
+      </li>
     </ul>
 
     <div class="nav-cta-wrap">
@@ -48,9 +123,7 @@ const links = [
   </div>
 
   <div class="mobile-sheet" id="gb-mobile-sheet" hidden>
-    {links.map((l) => (
-      <a class="m-link" href={l.href}>{l.label}</a>
-    ))}
+    {mobileLinks.map((l) => (<a class="m-link" href={l.href}>{l.label}</a>))}
     <a class="pill m-cta" href="/book-a-call">
       <span class="chip" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -93,12 +166,16 @@ const links = [
   .nav-links{list-style:none; margin:0; padding:0; display:flex; align-items:center; gap:2px}
   .nav-item{position:relative}
   .nav-link{
-    display:inline-flex; align-items:center; cursor:pointer; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap;
     font-family:var(--gb-font-body); font-size:15px; font-weight:500; letter-spacing:-0.01em;
-    color:var(--gb-nav-ink); padding:9px 13px; border-radius:var(--gb-radius-xs);
+    color:var(--gb-nav-ink); padding:9px 13px; border:0; background:none; border-radius:var(--gb-radius-xs);
     transition:background .15s ease, color .15s ease;
   }
-  .nav-link:hover{background:rgba(43,41,38,.07)}
+  .nav-link:hover, .has-mega:hover > .nav-link, .has-mega:focus-within > .nav-link{background:rgba(43,41,38,.07)}
+  .chev{transition:transform .22s ease; opacity:.5; margin-top:1px}
+  .has-mega:hover > .nav-link .chev,
+  .has-mega:focus-within > .nav-link .chev,
+  .has-mega.mega-open > .nav-link .chev{transform:rotate(180deg); opacity:.8}
 
   .nav-cta-wrap{margin-left:auto; display:flex; align-items:center; gap:8px}
   /* CTA hidden at the top of the hero, fades in once scrolled (§B.1). */
@@ -129,6 +206,68 @@ const links = [
     border-radius:9px; transition:background .15s ease;
   }
   .nav-burger:hover{background:rgba(43,41,38,.07)}
+
+  /* ---- Mega-menus (§B.1) ---- */
+  .mega{
+    position:absolute; top:100%; left:0; padding-top:13px; z-index:90;
+    opacity:0; visibility:hidden; transform:translateY(7px); pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease, visibility .18s ease;
+  }
+  .has-mega:hover > .mega,
+  .has-mega:focus-within > .mega,
+  .has-mega.mega-open > .mega{opacity:1; visibility:visible; transform:none; pointer-events:auto}
+  .mega-card{
+    background:rgba(252,247,238,.94);
+    -webkit-backdrop-filter:blur(26px) saturate(1.6); backdrop-filter:blur(26px) saturate(1.6);
+    border:var(--gb-border-glass); border-radius:var(--gb-radius-lg);
+    box-shadow:var(--gb-shadow-mega); padding:14px; display:flex;
+  }
+  .mega-label{
+    font-family:var(--gb-font-label); font-size:11px; font-weight:500; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--gb-mega-label); padding:6px 12px 8px;
+  }
+
+  /* Roles — two-panel */
+  .mega-roles .mega-card{width:680px; padding:12px; gap:6px}
+  .mega-roles-cats{flex:none; width:208px; border-right:var(--gb-border-glass); padding-right:8px; display:flex; flex-direction:column; gap:1px}
+  .cat{
+    box-sizing:border-box; width:100%; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:11px 13px; border:0; background:none; text-align:left; border-radius:11px;
+    font-family:var(--gb-font-body); font-size:15px; font-weight:500; color:var(--gb-nav-ink);
+    transition:background .14s ease;
+  }
+  .cat:hover, .cat[data-active="true"]{background:rgba(43,41,38,.07)}
+  .cat svg{opacity:.38; flex:none}
+  .cat[data-active="true"] svg{opacity:.7}
+  .mega-roles-sub{flex:1; min-width:0; padding:0 4px 4px 12px; display:flex; flex-direction:column}
+  .mega-sub[hidden]{display:none}
+  .mega-sub-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px 10px; align-content:start}
+  .subrole{
+    display:block; font-family:var(--gb-font-body); font-size:14px; color:#3A352E; text-decoration:none;
+    padding:8px 11px; border-radius:9px; transition:background .14s ease, color .14s ease;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .subrole:hover{background:rgba(43,41,38,.07); color:#1F1B16}
+
+  /* Industries — 2-col dot links */
+  .mega-ind .mega-card{width:540px; flex-direction:column}
+  .mega-ind-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px 8px}
+  .indlink{
+    display:flex; align-items:center; gap:11px; font-family:var(--gb-font-body); font-size:14.5px; color:#3A352E;
+    text-decoration:none; padding:11px 13px; border-radius:11px; transition:background .14s ease;
+  }
+  .indlink:hover{background:rgba(43,41,38,.07)}
+  .inddot{width:7px; height:7px; border-radius:50%; background:var(--gb-gold-mid); flex:none}
+
+  /* Resources — two labelled columns */
+  .mega-res .mega-card{width:460px; gap:18px}
+  .res-col{flex:1; display:flex; flex-direction:column; gap:1px}
+  .reslink{
+    display:block; font-family:var(--gb-font-body); font-size:14.5px; font-weight:500; color:var(--gb-nav-ink);
+    text-decoration:none; padding:10px 13px; border-radius:11px; transition:background .14s ease;
+  }
+  .reslink:hover{background:rgba(43,41,38,.07)}
+  .reslink small{display:block; font-size:12.5px; font-weight:400; color:var(--gb-mega-label); margin-top:3px}
 
   .mobile-sheet{display:none}
 
@@ -161,6 +300,10 @@ const links = [
   .nav-burger:focus-visible,
   .pill:focus-visible,
   .m-link:focus-visible,
+  .cat:focus-visible,
+  .subrole:focus-visible,
+  .indlink:focus-visible,
+  .reslink:focus-visible,
   .nav-logo:focus-visible{outline:var(--gb-focus); outline-offset:3px}
 </style>
 
@@ -174,15 +317,8 @@ const links = [
 
     // Scrolled (glass) state — threshold 8px per §B.1.
     let ticking = false;
-    const syncScroll = () => {
-      nav.classList.toggle('scrolled', window.scrollY > 8);
-      ticking = false;
-    };
-    addEventListener('scroll', () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(syncScroll);
-    }, { passive: true });
+    const syncScroll = () => { nav.classList.toggle('scrolled', window.scrollY > 8); ticking = false; };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(syncScroll); } }, { passive: true });
     syncScroll();
 
     // Mobile sheet toggle.
@@ -200,18 +336,48 @@ const links = [
       nav.classList.remove('menu-open');
       if (returnFocus) burger.focus();
     };
-
     burger.addEventListener('click', () => (isOpen() ? close() : open()));
-    // Close on Esc, on navigating a link, on outside click, and when leaving mobile width.
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) close(); });
-    sheet.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('a')) close(false);
-    });
-    document.addEventListener('pointerdown', (e) => {
-      if (isOpen() && !nav.contains(e.target as Node)) close(false);
-    });
+    sheet.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) close(false); });
     const mq = matchMedia('(min-width:981px)');
     mq.addEventListener('change', (e) => { if (e.matches && isOpen()) close(false); });
+
+    // Mega-menus.
+    const megaItems = Array.from(nav.querySelectorAll<HTMLElement>('.has-mega'));
+    const closeMegas = () => megaItems.forEach((it) => {
+      it.classList.remove('mega-open');
+      it.querySelector('.nav-link')?.setAttribute('aria-expanded', 'false');
+    });
+    megaItems.forEach((item) => {
+      const trigger = item.querySelector<HTMLElement>('.nav-link');
+      trigger?.addEventListener('click', () => {
+        const willOpen = !item.classList.contains('mega-open');
+        closeMegas();
+        item.classList.toggle('mega-open', willOpen);
+        trigger.setAttribute('aria-expanded', String(willOpen));
+      });
+      // Keyboard: reflect expanded state as focus moves in/out of the item.
+      item.addEventListener('focusin', () => trigger?.setAttribute('aria-expanded', 'true'));
+      item.addEventListener('focusout', (e) => {
+        if (!item.contains(e.relatedTarget as Node)) { item.classList.remove('mega-open'); trigger?.setAttribute('aria-expanded', 'false'); }
+      });
+      // Roles category rail → swap the sub-role panel.
+      const cats = Array.from(item.querySelectorAll<HTMLElement>('.cat'));
+      const subs = Array.from(item.querySelectorAll<HTMLElement>('.mega-sub'));
+      cats.forEach((cat) => {
+        const activate = () => {
+          cats.forEach((c) => { const on = c === cat; c.dataset.active = String(on); c.setAttribute('aria-selected', String(on)); });
+          subs.forEach((s) => { (s as HTMLElement).hidden = s.dataset.cat !== cat.dataset.cat; });
+        };
+        cat.addEventListener('pointerenter', activate);
+        cat.addEventListener('focus', activate);
+      });
+    });
+
+    // Esc / outside-click close both the sheet and any open mega.
+    addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (isOpen()) close(); closeMegas(); } });
+    document.addEventListener('pointerdown', (e) => {
+      if (!nav.contains(e.target as Node)) { if (isOpen()) close(false); closeMegas(); }
+    });
   };
 
   if ('requestIdleCallback' in window) requestIdleCallback(run);

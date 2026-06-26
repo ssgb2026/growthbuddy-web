@@ -88,7 +88,7 @@ const faceRows = [
   .panel{
     position:relative; width:58px; height:58px; border-radius:15px; overflow:hidden;
     background-color:#EFE2D2; background-size:cover; background-position:center 38%; background-repeat:no-repeat;
-    filter:grayscale(1); box-shadow:var(--gb-shadow-tile); will-change:transform, filter, opacity;
+    filter:grayscale(1); box-shadow:var(--gb-shadow-tile);
     transition:transform .26s ease-out, filter .26s ease-out, opacity .26s ease-out, box-shadow .26s ease-out;
   }
 
@@ -228,10 +228,15 @@ const faceRows = [
       }
     };
 
+    // Promote tiles to their own layers ONLY while interacting, then release —
+    // a permanent will-change on 14 filtered tiles starves the whole compositor.
+    let release = 0;
+    const promote = (on: boolean) => { const v = on ? 'transform, filter' : 'auto'; for (const t of tiles) t.style.willChange = v; };
+
     const frame = () => { raf = 0; apply(px, py); };
     const onMove = (e: PointerEvent) => { px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(frame); };
-    const onEnter = (e: PointerEvent) => { hovering = true; measure(); px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(frame); };
-    const onLeave = () => { hovering = false; if (raf) { cancelAnimationFrame(raf); raf = 0; } apply(fx0, fy0); };
+    const onEnter = (e: PointerEvent) => { hovering = true; clearTimeout(release); promote(true); measure(); px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(frame); };
+    const onLeave = () => { hovering = false; if (raf) { cancelAnimationFrame(raf); raf = 0; } apply(fx0, fy0); release = window.setTimeout(() => promote(false), 320); };
 
     measure();
     apply(fx0, fy0);                                 // resting focus on load
