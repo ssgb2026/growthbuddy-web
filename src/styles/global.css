@@ -15,11 +15,15 @@ h1,h2,h3{font-family:var(--gb-font-display);letter-spacing:var(--gb-display-ls);
 @media (max-width:768px){.container{padding-inline:20px}}
 
 /* Paper-grain overlay — every non-hero section (design-system A.2 / C.1).
-   Fixed, decorative, pointer-transparent. Reconciled values: opacity .05,
-   fractalNoise baseFrequency 0.9, 160px tile, multiply. */
+   Fixed, decorative, pointer-transparent. fractalNoise baseFrequency 0.9, 160px.
+   PERF: no mix-blend-mode. A fixed, full-viewport blended layer forces the whole
+   page off the fast-composite path — every hover/scroll re-blends the viewport
+   and input goes laggy. At .05 opacity multiply vs normal is imperceptible, so
+   we drop the blend; the grain stays a passive cached layer. See the
+   no-expensive-compositing memory. */
 .gb-grain{
   position:fixed; inset:0; z-index:1; pointer-events:none;
-  opacity:.05; mix-blend-mode:multiply;
+  opacity:.05;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 

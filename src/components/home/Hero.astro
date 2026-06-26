@@ -125,7 +125,7 @@ const faceRows = [
     content:""; position:absolute; z-index:0; width:calc(100% + 0.3em); height:calc(100% + 0.3em);
     top:-0.15em; left:-0.15em; border-radius:inherit;
     background:linear-gradient(-135deg, rgba(var(--sh),.5), transparent 20%, transparent 100%);
-    filter:blur(0.0125em); opacity:.28; mix-blend-mode:multiply;
+    filter:blur(0.0125em); opacity:.28; /* no mix-blend-mode — keeps CTA hover repaints cheap */
   }
   .cta .button-outer{
     position:relative; z-index:1; border-radius:inherit; transition:box-shadow 300ms ease;
