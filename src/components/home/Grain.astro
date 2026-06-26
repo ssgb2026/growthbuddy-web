@@ -1,0 +1,11 @@
+---
+/*
+  Paper-grain overlay (design-system A.2 / C.1).
+  A single fixed, decorative, aria-hidden layer that textures every non-hero
+  section. One instance covers the whole page (it is position:fixed); the hero
+  paints its own stronger grain within its own box. Static — no motion to
+  reduce. The .gb-grain rule lives in global.css so any section/page can reuse
+  the class directly without this wrapper.
+*/
+---
+<div class="gb-grain" aria-hidden="true"></div>
