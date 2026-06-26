@@ -17,6 +17,14 @@ Cloudflare Pages hosting. Production domain: https://www.mygrowthbuddy.com — *
 - Homepage sections must match the approved Claude Design mocks EXACTLY (fidelity clause). Don't reinterpret.
 - Design source of truth is /design-reference/growthbuddy-design-system.md + the per-fold HTML exports + src/styles/tokens.css (tokens are --gb-*). The old growthbuddy-claude-design-prompts.md and the fold mocks are historical, not build references.
 
+## Interactive behaviour (homepage)
+- Interactive behaviour on the homepage is JS-driven and computed at runtime. The mock .html files show
+  only the RESTING state — reading their CSS alone produces a dead page. For every animated fold, implement
+  the mechanics from /design-reference/INTERACTIVE-BEHAVIOUR-SPEC.md and the matching *.dc.html
+  componentDidMount(), not inferred from markup. The bundled "Fold N" exports bury logic in a
+  <script type='__bundler/template'> blob — prefer the .dc.html source. Each effect is a small client island
+  that respects prefers-reduced-motion (jump to final state) and rAF-throttles scroll/pointer handlers.
+
 ## URL conventions
 - lowercase, hyphenated, **no trailing slash**.
 - Role pages live at **/hire/[role]** (nav label may say "Roles"). Industries at /industries/[slug].
