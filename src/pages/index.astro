@@ -1,17 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Grain from '../components/home/Grain.astro';
+import Hero from '../components/home/Hero.astro';
+import TrustedBy from '../components/home/TrustedBy.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
+
+  {/* Fold 1 — Hero + Trusted-by: one full-height (min 100vh) screen. */}
+  <div class="fold1">
+    <Hero />
+    <TrustedBy />
+  </div>
+
   {/*
-    Homepage folds — built one at a time into src/components/home/, in the
-    canonical order (= design-reference filename number = design-system C.1):
-      1  Hero               6  The Results
+    Remaining homepage folds — built one at a time into src/components/home/:
       2  The Problem        7  Behind Every Match
       3  How We Compare     8  Pricing
       4  How It Works       9  Team & FAQ
       5  Roles we hire for  10 Final CTA & Footer
-    Each fold is reproduced faithfully from its decoded mock template.
   */}
 </BaseLayout>
+
+<style>
+  .fold1{min-height:100vh; display:flex; flex-direction:column; background:var(--gb-paper)}
+  @media (max-width:768px){
+    .fold1{min-height:auto; display:block}
+  }
+</style>

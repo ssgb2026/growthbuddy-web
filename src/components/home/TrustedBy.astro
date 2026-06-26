@@ -1,0 +1,55 @@
+---
+/*
+  Fold 1 (lower) — Trusted-by logo strip (§B.17). Sits flush under the hero as
+  the paper foot of the first full-height screen. Six partner marks at the mock
+  heights, .45 opacity at rest → 1 + scale(1.04) on hover/focus.
+
+  The "Trusted by" eyebrow is added per the brief + §B.17 (the mock's export
+  omits it). Logo PNGs were extracted from the mock into /img/partners/ —
+  confirm licensing before launch.
+*/
+const logos = [
+  { name: 'Manual', file: '/img/partners/manual.png', h: 27 },
+  { name: 'Spekk', file: '/img/partners/spekk.png', h: 25 },
+  { name: 'Tread Partners', file: '/img/partners/tread-partners.png', h: 36 },
+  { name: 'YellowFin Digital', file: '/img/partners/yellowfin-digital.png', h: 29 },
+  { name: 'archa', file: '/img/partners/archa.png', h: 27 },
+  { name: '3Dctrl', file: '/img/partners/3dctrl.png', h: 23 },
+];
+---
+<section class="trusted" data-screen-label="Trusted by">
+  <p class="trusted-eyebrow">Trusted by</p>
+  <div class="logos">
+    {logos.map((l) => (
+      <a class="logo" href="#" aria-label={l.name}>
+        <img src={l.file} alt={l.name} style={`height:${l.h}px`} width="130" height={l.h} loading="lazy" />
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .trusted{flex:none; background:var(--gb-paper); padding:22px 32px 30px; text-align:center}
+  .trusted-eyebrow{
+    font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow); text-transform:uppercase;
+    letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+    margin:0 0 18px;
+  }
+  .logos{
+    max-width:var(--gb-container); margin:0 auto; display:flex; align-items:center;
+    justify-content:center; gap:72px;
+  }
+  .logo{
+    display:inline-flex; align-items:center; justify-content:center; opacity:.45;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .logo:hover{opacity:1; transform:scale(1.04)}
+  .logo:focus-visible{opacity:1; outline:var(--gb-focus); outline-offset:3px}
+  .logo img{width:auto; display:block; max-width:130px}
+
+  @media (max-width:768px){
+    .trusted{padding:30px 22px 40px}
+    .logos{flex-wrap:wrap; gap:30px 40px}
+    .logo img{max-width:104px}
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+/*
+  Fold 1 — Hero (reproduces "Fold 1 – Hero.html").
+  Holds the page's single <h1>. The gold halo + grain live only here.
+
+  Token reconciliations vs the mock:
+  - Gold halo uses the --gb-gold-* ramp; H1 ink --gb-ink-hero, sub --gb-sub-hero,
+    bullets --gb-bullet-hero; the one italic word is --gb-clay-dark (the mock's
+    hero em is #9E5740, darker than body-heading clay, for legibility on gold).
+  - CTA = locked neumorphic on-gold pill driven by the --gb-cta-* tokens.
+  - Grain: opacity .65, mix-blend overlay (reconciled — not .25).
+  - .hero is raised above the global paper-grain (z-index:2) so only its own
+    overlay grain textures the gold; paper sections keep the .gb-grain layer.
+
+  Face panels: the mock's 14 face photos are PLACEHOLDER tiles here — real
+  consented photos only (no AI faces, brand rule), pending assets. The grid +
+  its role="img" label are preserved.
+*/
+---
+<section class="hero" data-screen-label="Hero">
+  <div class="inner">
+    <div class="panels" role="img" aria-label="People Growthbuddy has hired and coached" data-reveal data-delay="80">
+      <div class="prow">
+        <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
+      </div>
+      <div class="prow">
+        <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
+      </div>
+      <div class="prow">
+        <div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div>
+      </div>
+    </div>
+
+    <h1 class="h1" data-reveal data-delay="160">Hire <em>sharper</em> talent without hiring locally.</h1>
+
+    <p class="sub" data-reveal data-delay="240">We find highly capable people globally, vet them deeply and manage their performance after they join your team.</p>
+
+    <a class="cta" href="/book-a-call" data-reveal data-delay="320">
+      <div class="button-outer"><div class="button-inner"><span>Start your search →</span></div></div>
+    </a>
+
+    <div class="bullets" data-reveal data-delay="400">
+      <span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 17 13.5 8.5 9 13 2 6.5"></polyline><polyline points="16.5 17 22 17 22 11.5"></polyline></svg>
+        60% lower salary costs
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="12" r="9"></circle><polyline points="13 7 13 12 16.5 14"></polyline></svg>
+        Aligned to your hours
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4h10v5a5 5 0 0 1-10 0V4z"></path><path d="M7.5 5.5H5a2 2 0 0 0 0 5H7.5"></path><path d="M17.5 5.5h2.5a2 2 0 0 1 0 5H17.5"></path><line x1="12.5" y1="14" x2="12.5" y2="17.5"></line><line x1="8.9" y1="20.5" x2="16.1" y2="20.5"></line></svg>
+        Personally coached to perform
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero{
+    position:relative; z-index:2; flex:1 1 auto; min-height:520px; display:flex; overflow:hidden;
+    border-radius:0 0 40px 40px;
+    background:
+      radial-gradient(60% 50% at 50% 16%, var(--gb-gold-hi) 0%, rgba(243,222,160,0) 62%),
+      radial-gradient(80% 75% at 20% 28%, var(--gb-gold-warm) 0%, rgba(232,195,135,0) 58%),
+      radial-gradient(95% 95% at 82% 90%, var(--gb-gold-deep) 0%, rgba(169,118,47,0) 60%),
+      radial-gradient(130% 120% at 50% 42%, var(--gb-gold) 0%, var(--gb-gold-mid) 52%, var(--gb-gold-shadow) 100%);
+  }
+  /* Hero grain — opacity .65, overlay, contrast-boosted desaturated fractalNoise. */
+  .hero::after{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.65; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='1.8' intercept='-0.4'/><feFuncG type='linear' slope='1.8' intercept='-0.4'/><feFuncB type='linear' slope='1.8' intercept='-0.4'/><feFuncA type='linear' slope='0' intercept='1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .inner{
+    position:relative; z-index:2; flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:96px 32px 44px;
+  }
+
+  /* Face cluster — placeholder tiles pending real consented photos. */
+  .panels{position:relative; display:flex; flex-direction:column; align-items:center; gap:15px; margin:0 0 44px}
+  .prow{display:flex; justify-content:center; gap:15px}
+  .panel{
+    width:58px; height:58px; border-radius:15px; overflow:hidden;
+    background:linear-gradient(150deg,#EFE2D2,#EADBCE); box-shadow:var(--gb-shadow-tile);
+  }
+
+  .h1{
+    font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-display);
+    line-height:1.08; letter-spacing:var(--gb-display-ls); color:var(--gb-ink-hero);
+    max-width:16ch; margin:0; text-wrap:balance;
+  }
+  .h1 em{font-style:italic; font-weight:400; color:var(--gb-clay-dark)}
+
+  .sub{
+    font-family:var(--gb-font-body); font-size:var(--gb-fs-lede); line-height:1.4;
+    color:var(--gb-sub-hero); max-width:50ch; margin:28px 0 0; font-weight:500; text-wrap:pretty;
+  }
+
+  .bullets{display:flex; flex-wrap:wrap; justify-content:center; gap:14px 20px; margin:36px 0 0}
+  .bullets span{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--gb-font-label);
+    text-transform:uppercase; letter-spacing:.04em; font-size:12px; font-weight:500; color:var(--gb-bullet-hero);
+  }
+  .bullets svg{stroke:var(--gb-clay-dark); flex:none}
+
+  /* Primary CTA — locked neumorphic on-gold pill (§B.3). */
+  .cta{
+    --sh:var(--gb-cta-shadow); --hi:var(--gb-cta-hi);
+    --txt1:var(--gb-cta-txt-1); --txt2:var(--gb-cta-txt-2);
+    --g1:var(--gb-cta-gold-1); --g2:var(--gb-cta-gold-2);
+    position:relative; display:inline-block; cursor:pointer; text-decoration:none; border:0;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    font-size:17px; border-radius:999vw; background-color:rgba(var(--sh),.5); margin-top:28px;
+    box-shadow:-0.15em -0.15em 0.15em -0.075em rgba(var(--sh),.22), 0.0375em 0.0375em 0.0675em 0 rgba(var(--sh),.10);
+  }
+  .cta::after{
+    content:""; position:absolute; z-index:0; width:calc(100% + 0.3em); height:calc(100% + 0.3em);
+    top:-0.15em; left:-0.15em; border-radius:inherit;
+    background:linear-gradient(-135deg, rgba(var(--sh),.5), transparent 20%, transparent 100%);
+    filter:blur(0.0125em); opacity:.28; mix-blend-mode:multiply;
+  }
+  .cta .button-outer{
+    position:relative; z-index:1; border-radius:inherit; transition:box-shadow 300ms ease;
+    box-shadow:0 0.05em 0.05em -0.01em rgba(var(--sh),1), 0 0.01em 0.01em -0.01em rgba(var(--sh),.5), 0.15em 0.3em 0.1em -0.01em rgba(var(--sh),.25);
+  }
+  .cta:hover .button-outer{box-shadow:0 0 0 0 rgba(var(--sh),1), 0 0 0 0 rgba(var(--sh),.5), 0 0 0 0 rgba(var(--sh),.25)}
+  .cta .button-inner{
+    position:relative; z-index:1; border-radius:inherit; padding:0.92em 1.5em;
+    background-image:linear-gradient(135deg, var(--g1), var(--g2));
+    transition:box-shadow 300ms ease, clip-path 250ms ease, transform 250ms ease;
+    overflow:clip; clip-path:inset(0 0 0 0 round 999vw);
+    box-shadow:0 0 0 0 inset rgba(var(--sh),.1),-0.05em -0.05em 0.05em 0 inset rgba(var(--sh),.22),0 0 0 0 inset rgba(var(--sh),.1),0 0 0.05em 0.2em inset rgba(var(--hi),.22),0.025em 0.05em 0.1em 0 inset rgba(var(--hi),.92),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.25em 0.25em 0.1em inset rgba(var(--sh),.22);
+  }
+  .cta:hover .button-inner{
+    clip-path:inset(clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) round 999vw);
+    box-shadow:0.1em 0.15em 0.05em 0 inset rgba(var(--sh),.7),-0.025em -0.03em 0.05em 0.025em inset rgba(var(--sh),.45),0.25em 0.25em 0.2em 0 inset rgba(var(--sh),.45),0 0 0.05em 0.5em inset rgba(var(--hi),.14),0 0 0 0 inset rgba(var(--hi),1),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.12em 0.2em 0.1em inset rgba(var(--sh),.22);
+  }
+  .cta .button-inner span{
+    position:relative; z-index:4; font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600;
+    color:transparent; background-image:linear-gradient(135deg, var(--txt1), var(--txt2));
+    -webkit-background-clip:text; background-clip:text; transition:transform 250ms ease;
+    display:block; -webkit-user-select:none; user-select:none;
+  }
+  .cta:hover .button-inner span{transform:scale(0.975)}
+  .cta:active .button-inner{transform:scale(0.975)}
+  .cta:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+
+  /* Short-viewport + mobile rhythm (from the mock). */
+  @media (max-height:870px){
+    .inner{padding:84px 32px 34px}
+    .panels{gap:13px; margin:0 0 34px} .prow{gap:13px}
+    .panel{width:52px; height:52px; border-radius:13px}
+    .sub{margin-top:22px} .bullets{margin-top:30px} .cta{margin-top:22px}
+  }
+  @media (max-height:760px){
+    .inner{padding:78px 32px 26px}
+    .panels{gap:11px; margin:0 0 26px} .prow{gap:11px}
+    .panel{width:46px; height:46px; border-radius:12px}
+    .h1{font-size:clamp(34px,4.6vw,52px)}
+    .sub{margin-top:18px} .bullets{margin-top:26px} .cta{margin-top:18px}
+  }
+  @media (max-width:768px){
+    .hero{border-radius:0 0 var(--gb-radius-2xl) var(--gb-radius-2xl); min-height:auto}
+    .inner{padding:100px 22px 48px}
+    .panels{gap:9px; margin:0 0 30px} .prow{gap:9px}
+    .panel{width:42px; height:42px; border-radius:11px}
+  }
+</style>
