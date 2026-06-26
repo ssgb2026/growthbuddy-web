@@ -1,17 +1,129 @@
-:root{
-  /* Colour */
-  --paper:#FAF4EA; --card:#ECE4D5; --tile:#FCF9F2; --hairline:#E7DCC8;
-  --charcoal:#181A1F; --grey-ink:#5E6269;
-  --clay:#B96B4D; --clay-dark:#9E5740; --forest:#214E3F; --soft-yellow:#F4D58D;
+/* ============================================================================
+   Growthbuddy — Canonical design tokens
+   Source of truth: growthbuddy-design-system.md (derived from the production
+   designs) reconciled against the project's locked decisions.
+   Convention: all tokens are prefixed --gb-* to match the exported design code.
+   This file REPLACES the Phase 0 starter tokens.css.
+   ============================================================================ */
+:root {
+  /* ---- Colour: core ---- */
+  --gb-paper:        #FAF4EA;   /* page background everywhere */
+  --gb-surface:      #ECE4D5;   /* warm greige card / panel */
+  --gb-surface-tile: #FCF9F2;   /* near-white inner tile */
+  --gb-hairline:     #DED5C6;   /* 1px divider (canonical; supersedes old #E7DCC8) */
+  --gb-ink:          #181A1F;   /* primary text on paper/surface */
+  --gb-ink-warm:     #1B2420;   /* primary text inside greige panels */
+  --gb-muted:        #5E6269;   /* secondary / body-muted text */
+  --gb-clay:         #B96B4D;   /* PRIMARY accent — eyebrows, links, icons, ticks, CTA */
+  --gb-clay-dark:    #9E5740;   /* clay hover/pressed + focus outline */
+  --gb-forest:       #355A47;   /* green used as tint-set text (see note in reconciliation) */
+  --gb-forest-deep:  #214E3F;   /* rare: mobile compare ::before label only */
 
-  /* Type */
-  --font-display:"Libre Baskerville", Georgia, serif;
-  --font-body:"Inter", system-ui, sans-serif;
-  --font-label:"Space Grotesk", system-ui, sans-serif;
-  --tracking-display:-0.07em;          /* locked, ALL Libre Baskerville */
+  /* ---- Colour: in-situ text tints ---- */
+  --gb-ink-hero:     #241B10;   /* hero H1 ink (ON GOLD ONLY) */
+  --gb-sub-hero:     #473722;   /* hero sub on gold */
+  --gb-bullet-hero:  #3A2D1C;   /* hero bullets on gold */
+  --gb-nav-ink:      #2B2926;   /* nav link text */
+  --gb-pill-ink:     #3A2417;   /* secondary-pill label / chip arrow */
+  --gb-meta:         #8A847A;   /* meta / placeholder / role lines */
+  --gb-mega-label:   #A08A6C;   /* nav mega-menu label */
 
-  /* Space / layout */
-  --radius-card:20px;
-  --pad-section-y:120px; --pad-section-y-m:72px;
-  --maxw:1200px; --maxw-wide:1280px; --gutter:24px; --gutter-m:20px;
+  /* ---- Colour: hero gold ramp (used only inside the hero gradient) ---- */
+  --gb-gold-hi:      #F3DEA0;
+  --gb-gold-warm:    #E8C387;
+  --gb-gold:         #D7AD63;
+  --gb-gold-mid:     #C2954E;
+  --gb-gold-shadow:  #B0823F;
+  --gb-gold-deep:    #A9762F;
+
+  /* ---- Colour: CTA gradients (neumorphic pill) ---- */
+  --gb-cta-gold-1:   #DCBC72;  --gb-cta-gold-2:   #CBA862;  /* on-gold hero CTA, dark label */
+  --gb-cta-clay-1:   #E7B79A;  --gb-cta-clay-2:   #D89C72;  /* on-paper CTA variant */
+  --gb-cta-txt-1:    #241B10;  --gb-cta-txt-2:    #2C2012;  /* CTA label gradient */
+  --gb-cta-shadow:   74,47,23;     /* warm-brown shadow rgb (use rgba(var(--gb-cta-shadow), a)) */
+  --gb-cta-hi:       255,247,230;  /* warm-cream highlight rgb */
+
+  /* ---- Colour: multi-hue tint set (bg / text) — pills + fan cards ---- */
+  --gb-tint-sage-bg:  #D8E5DB;  --gb-tint-sage-tx:  #355A47;
+  --gb-tint-olive-bg: #E3E4C6;  --gb-tint-olive-tx: #57581F;
+  --gb-tint-wheat-bg: #F1E4BE;  --gb-tint-wheat-tx: #74571B;
+  --gb-tint-sand-bg:  #F4DDC2;  --gb-tint-sand-tx:  #8A5A2A;
+  --gb-tint-clay-bg:  #F1D8C9;  --gb-tint-clay-tx:  #8C4B33;
+  --gb-tint-rose-bg:  #ECD8D6;  --gb-tint-rose-tx:  #864E4A;
+  --gb-tint-teal-bg:  #CFE0D6;  --gb-tint-teal-tx:  #2D5747;
+
+  /* ---- Typography ---- */
+  --gb-font-display: 'Libre Baskerville', Georgia, serif;
+  --gb-font-body:    'Inter', system-ui, sans-serif;
+  --gb-font-label:   'Space Grotesk', sans-serif;
+  --gb-display-ls:   -0.07em;   /* hero / statement / all Libre Baskerville headings (locked) */
+  --gb-title-ls:     -0.07em;   /* section titles & stat numbers (= ~-3.5px at 48px; some exported folds use the px form) */
+  --gb-eyebrow-ls:   0.06em;    /* eyebrows (0.05em reserved for table/meta labels) */
+  --gb-cta-ls:       0.085em;   /* CTA label tracking */
+  --gb-fs-display:   clamp(38px, 5.4vw, 66px);
+  --gb-fs-title:     clamp(32px, 4.4vw, 48px);
+  --gb-fs-statement: clamp(24px, 3vw, 34px);
+  --gb-fs-stat:      48px;
+  --gb-fs-lede:      clamp(17px, 1.6vw, 19px);
+  --gb-fs-body:      16px;
+  --gb-fs-body-sm:   14px;
+  --gb-fs-eyebrow:   14px;
+  --gb-fs-meta:      11px;
+  --gb-weight-eyebrow: 500;     /* Medium — canonical (some early folds shipped 400) */
+  --gb-weight-title:   700;
+  --gb-weight-strong:  600;
+
+  /* ---- Spacing (4px base) ---- */
+  --gb-space-1: 4px;   --gb-space-2: 8px;   --gb-space-3: 12px;
+  --gb-space-4: 16px;  --gb-space-5: 22px;  --gb-space-6: 24px;
+  --gb-space-7: 32px;  --gb-space-8: 40px;  --gb-space-9: 48px;
+  --gb-space-10:56px;  --gb-space-12:72px;  --gb-space-15:96px;  --gb-space-16:120px;
+  --gb-section-y:   clamp(72px, 10vw, 120px);
+  --gb-gutter:      24px;
+
+  /* ---- Radii ---- */
+  --gb-radius-pill: 999px;
+  --gb-radius-xs:   10px;
+  --gb-radius-sm:   14px;
+  --gb-radius-md:   16px;
+  --gb-radius-lg:   20px;   /* standard card / panel */
+  --gb-radius-xl:   24px;   /* large feature panel */
+  --gb-radius-2xl:  28px;   /* hero CTA card (hero BOTTOM corners are 40px desktop / 28px mobile) */
+
+  /* ---- Shadows / elevation ---- */
+  --gb-shadow-tile:       0 1px 2px rgba(0,0,0,.04);
+  --gb-shadow-card:       0 8px 24px rgba(0,0,0,.06);
+  --gb-shadow-panel:      0 12px 30px rgba(60,50,35,.08);
+  --gb-shadow-fan:        0 10px 26px rgba(0,0,0,.07);
+  --gb-shadow-float:      0 18px 40px rgba(0,0,0,.12);
+  --gb-shadow-nav:        0 10px 34px -18px rgba(74,47,23,.30);
+  --gb-shadow-mega:       0 28px 64px -26px rgba(74,47,23,.42), 0 6px 16px -8px rgba(74,47,23,.18);
+  --gb-shadow-pill-hover: 0 6px 16px -10px rgba(74,47,23,.45);
+
+  /* ---- Borders ---- */
+  --gb-border-hairline: 1px solid #DED5C6;
+  --gb-border-glass:    1px solid rgba(43,41,38,.08);
+
+  /* ---- Motion ---- */
+  --gb-ease:        cubic-bezier(.22,1,.36,1);
+  --gb-dur-hover:   .18s;
+  --gb-dur-reveal:  .6s;
+  --gb-dur-layout:  .45s;
+
+  /* ---- Focus ---- */
+  --gb-focus: 2px solid #9E5740;
+
+  /* ---- Layout / breakpoints ---- */
+  --gb-container: 1200px;
+  --gb-bp-sm:  560px;  --gb-bp-md:  768px;  --gb-bp-lg:  820px;
+  --gb-bp-xl:  980px;  --gb-bp-2xl: 1340px;
 }
+
+/* ----------------------------------------------------------------------------
+   GRAIN (per-section effect, not a token — documented here for reference):
+   • Hero grain: opacity .65, mix-blend-mode: overlay, contrast-boosted
+     desaturated fractalNoise (baseFrequency 0.78). See Hero export for verbatim.
+     [NOTE: this supersedes the old 0.25 hero grain — confirm it's intentional.]
+   • Paper grain (every non-hero section): fixed, opacity .05, mix-blend-mode:
+     multiply, fractalNoise baseFrequency 0.9, 160px tile.
+   ---------------------------------------------------------------------------- */

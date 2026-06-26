@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Growthbuddy — Components & Tokens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GROWTHBUDDY DESIGN TOKENS  — copy-paste :root from the .md
+   This page is driven entirely by these custom properties.
+   ============================================================ */
+:root {
+  --gb-paper:#FAF4EA; --gb-surface:#ECE4D5; --gb-surface-tile:#FCF9F2;
+  --gb-hairline:#DED5C6; --gb-ink:#181A1F; --gb-ink-warm:#1B2420;
+  --gb-muted:#5E6269; --gb-clay:#B96B4D; --gb-clay-dark:#9E5740; --gb-forest:#355A47;
+  --gb-nav-ink:#2B2926; --gb-pill-ink:#3A2417; --gb-meta:#8A847A; --gb-mega-label:#A08A6C;
+  --gb-ink-hero:#241B10; --gb-sub-hero:#473722;
+
+  --gb-font-display:'Libre Baskerville',Georgia,serif;
+  --gb-font-body:'Inter',system-ui,sans-serif;
+  --gb-font-label:'Space Grotesk',sans-serif;
+  --gb-display-ls:-0.07em; --gb-title-ls:-3.5px; --gb-eyebrow-ls:0.06em; --gb-cta-ls:0.085em;
+  --gb-weight-eyebrow:500; --gb-weight-title:700; --gb-weight-strong:600;
+
+  --gb-radius-pill:999px; --gb-radius-xs:10px; --gb-radius-sm:14px;
+  --gb-radius-md:16px; --gb-radius-lg:20px; --gb-radius-xl:24px; --gb-radius-2xl:28px;
+
+  --gb-shadow-tile:0 1px 2px rgba(0,0,0,.04);
+  --gb-shadow-card:0 8px 24px rgba(0,0,0,.06);
+  --gb-shadow-panel:0 12px 30px rgba(60,50,35,.08);
+  --gb-shadow-fan:0 10px 26px rgba(0,0,0,.07);
+  --gb-shadow-float:0 18px 40px rgba(0,0,0,.12);
+  --gb-shadow-nav:0 10px 34px -18px rgba(74,47,23,.30);
+  --gb-shadow-mega:0 28px 64px -26px rgba(74,47,23,.42),0 6px 16px -8px rgba(74,47,23,.18);
+  --gb-shadow-pill-hover:0 6px 16px -10px rgba(74,47,23,.45);
+
+  --gb-border-hairline:1px solid #DED5C6;
+  --gb-ease:cubic-bezier(.22,1,.36,1);
+  --gb-focus:2px solid #9E5740;
+  --gb-gutter:24px; --gb-container:1200px;
+
+  /* multi-hue tint set */
+  --gb-tint-sage-bg:#D8E5DB; --gb-tint-sage-tx:#355A47;
+  --gb-tint-olive-bg:#E3E4C6; --gb-tint-olive-tx:#57581F;
+  --gb-tint-wheat-bg:#F1E4BE; --gb-tint-wheat-tx:#74571B;
+  --gb-tint-sand-bg:#F4DDC2; --gb-tint-sand-tx:#8A5A2A;
+  --gb-tint-clay-bg:#F1D8C9; --gb-tint-clay-tx:#8C4B33;
+  --gb-tint-rose-bg:#ECD8D6; --gb-tint-rose-tx:#864E4A;
+  --gb-tint-teal-bg:#CFE0D6; --gb-tint-teal-tx:#2D5747;
+}
+
+/* ---------- page chrome ---------- */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--gb-paper);color:var(--gb-ink);font-family:var(--gb-font-body);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.5}
+a{color:inherit}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 var(--gb-gutter)}
+
+/* doc header */
+.doc-head{padding:80px 0 36px;border-bottom:var(--gb-border-hairline)}
+.doc-eyebrow{font-family:var(--gb-font-label);font-weight:var(--gb-weight-eyebrow);text-transform:uppercase;
+  letter-spacing:var(--gb-eyebrow-ls);font-size:14px;color:var(--gb-clay);margin:0 0 16px}
+.doc-title{font-family:var(--gb-font-display);font-weight:700;font-size:clamp(38px,5vw,60px);
+  line-height:1.06;letter-spacing:var(--gb-display-ls);margin:0;max-width:18ch}
+.doc-title em{font-style:italic;font-weight:400;color:var(--gb-clay)}
+.doc-sub{font-size:19px;color:var(--gb-muted);max-width:60ch;margin:22px 0 0;text-wrap:pretty}
+
+/* index */
+.index{display:flex;flex-wrap:wrap;gap:8px 10px;margin:28px 0 0}
+.index a{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:11.5px;color:var(--gb-pill-ink);text-decoration:none;background:var(--gb-surface);
+  padding:8px 14px;border-radius:var(--gb-radius-pill);transition:filter .18s var(--gb-ease),transform .15s var(--gb-ease)}
+.index a:hover{filter:brightness(.97);transform:translateY(-1px)}
+
+/* section scaffold */
+section[id]{padding:64px 0;border-bottom:var(--gb-border-hairline);scroll-margin-top:20px}
+.sec-label{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.06em;
+  font-size:13px;color:var(--gb-clay);margin:0 0 10px}
+.sec-title{font-family:var(--gb-font-display);font-weight:700;font-size:clamp(28px,3.4vw,40px);
+  line-height:1.1;letter-spacing:var(--gb-title-ls);margin:0 0 8px}
+.sec-note{font-size:16px;color:var(--gb-muted);max-width:62ch;margin:0 0 36px;text-wrap:pretty}
+
+/* spec caption under each demo */
+.cap{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:10.5px;color:var(--gb-meta);margin:14px 0 0}
+.muted-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--gb-muted)}
+.proposed{display:inline-block;font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;
+  letter-spacing:.05em;font-size:9.5px;color:var(--gb-clay-dark);border:1px solid var(--gb-clay-dark);
+  border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+
+.grid{display:grid;gap:18px}
+.demo{padding:28px;background:#fff7;border:var(--gb-border-hairline);border-radius:var(--gb-radius-lg)}
+.row{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+
+/* ===== COLOUR SWATCHES ===== */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{border-radius:var(--gb-radius-md);overflow:hidden;border:var(--gb-border-hairline);background:#fff}
+.sw .chip{height:78px}
+.sw .meta{padding:10px 12px}
+.sw .nm{font-weight:600;font-size:13px}
+.sw .hex{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--gb-muted);margin-top:2px}
+.sw .role{font-size:11px;color:var(--gb-muted);margin-top:4px;line-height:1.35}
+
+/* tint pills row */
+.tintset{display:flex;flex-wrap:wrap;gap:10px}
+.tintset .tp{display:inline-flex;align-items:center;font-family:var(--gb-font-body);font-weight:500;
+  font-size:14.5px;padding:9px 18px;border-radius:var(--gb-radius-pill)}
+
+/* ===== TYPE SPECIMENS ===== */
+.spec{padding:18px 0;border-bottom:1px dashed var(--gb-hairline)}
+.spec:last-child{border-bottom:0}
+.specimen-display{font-family:var(--gb-font-display);font-weight:700;font-size:clamp(38px,5.4vw,66px);
+  line-height:1.08;letter-spacing:-0.07em;margin:0;color:var(--gb-ink)}
+.specimen-display em{font-style:italic;font-weight:400;color:var(--gb-clay)}
+.specimen-title{font-family:var(--gb-font-display);font-weight:700;font-size:48px;line-height:1.1;
+  letter-spacing:var(--gb-title-ls);margin:0}
+.specimen-title em{font-style:italic;font-weight:400;color:var(--gb-clay)}
+.specimen-statement{font-family:var(--gb-font-display);font-weight:400;font-size:clamp(24px,3vw,34px);
+  line-height:1.46;letter-spacing:-0.07em;margin:0;max-width:24ch}
+.specimen-stat{font-family:var(--gb-font-display);font-weight:400;font-size:48px;line-height:1;
+  letter-spacing:var(--gb-title-ls);margin:0}
+.specimen-lede{font-size:19px;line-height:1.5;color:var(--gb-muted);margin:0;max-width:46ch}
+.specimen-body{font-size:16px;line-height:1.6;color:var(--gb-ink);margin:0;max-width:60ch}
+.specimen-eyebrow{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;
+  letter-spacing:.06em;font-size:14px;color:var(--gb-clay);margin:0}
+
+/* ===== SPACING ===== */
+.sp-row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.sp{display:flex;flex-direction:column;align-items:center;gap:8px}
+.sp .bar{background:var(--gb-clay);border-radius:3px;width:30px}
+.sp .lbl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--gb-muted)}
+
+/* ===== RADII ===== */
+.rad-row{display:flex;flex-wrap:wrap;gap:18px}
+.rad{display:flex;flex-direction:column;align-items:center;gap:8px}
+.rad .box{width:84px;height:84px;background:var(--gb-surface);box-shadow:var(--gb-shadow-tile)}
+.rad .lbl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--gb-muted)}
+
+/* ===== SHADOWS ===== */
+.sh-row{display:flex;flex-wrap:wrap;gap:26px;background:var(--gb-paper);padding:8px 4px}
+.sh{width:140px;height:92px;border-radius:var(--gb-radius-lg);background:var(--gb-surface-tile);
+  display:flex;align-items:flex-end;justify-content:center;padding:10px;text-align:center}
+.sh span{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--gb-muted)}
+
+/* ===== NAV demo ===== */
+.navbar{display:flex;align-items:center;gap:6px;height:64px;padding:0 22px;border-radius:var(--gb-radius-lg);
+  background:rgba(250,244,234,.78);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(43,41,38,.07);box-shadow:var(--gb-shadow-nav)}
+.navbar.plain{background:transparent;backdrop-filter:none;border:0;box-shadow:none}
+.nav-word{font-weight:600;font-size:17px;margin-right:18px}
+.nav-link{font-family:var(--gb-font-body);font-weight:500;font-size:15px;letter-spacing:-.01em;
+  color:var(--gb-nav-ink);padding:9px 13px;border-radius:10px;text-decoration:none;cursor:pointer;
+  transition:background .15s ease}
+.nav-link:hover{background:rgba(43,41,38,.07)}
+.nav-spacer{margin-left:auto}
+
+/* mega card */
+.mega-card{margin-top:14px;display:inline-flex;gap:6px;background:rgba(252,247,238,.96);
+  border:1px solid rgba(43,41,38,.08);border-radius:var(--gb-radius-lg);box-shadow:var(--gb-shadow-mega);padding:14px}
+.mega-label{font-family:var(--gb-font-label);font-size:11px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--gb-mega-label);padding:6px 12px 8px}
+.mega-col{display:flex;flex-direction:column;min-width:170px}
+.mega-item{font-size:14.5px;font-weight:500;color:var(--gb-nav-ink);text-decoration:none;padding:10px 13px;
+  border-radius:11px;transition:background .14s ease}
+.mega-item small{display:block;font-size:12.5px;font-weight:400;color:var(--gb-mega-label);margin-top:3px}
+.mega-item:hover{background:rgba(43,41,38,.07)}
+
+/* ===== BUTTONS ===== */
+/* primary neumorphic CTA — gold (locked) and paper variant */
+.cta{--sh:74,47,23;--hi:255,247,230;--txt1:#241B10;--txt2:#2C2012;--g1:#DCBC72;--g2:#CBA862;
+  all:unset;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);position:relative;font-size:17px;
+  border-radius:999vw;background-color:rgba(var(--sh),.5);
+  box-shadow:-0.15em -0.15em 0.15em -0.075em rgba(var(--sh),.22),0.0375em 0.0375em 0.0675em 0 rgba(var(--sh),.10)}
+.cta.paper{--txt1:#3E2012;--txt2:#33190C;--g1:#E7B79A;--g2:#D89C72}
+.cta::after{content:"";position:absolute;z-index:0;width:calc(100% + 0.3em);height:calc(100% + 0.3em);
+  top:-0.15em;left:-0.15em;border-radius:inherit;
+  background:linear-gradient(-135deg,rgba(var(--sh),.5),transparent 20%,transparent 100%);filter:blur(0.0125em);opacity:.28;mix-blend-mode:multiply}
+.cta .button-outer{position:relative;z-index:1;border-radius:inherit;transition:box-shadow 300ms ease;
+  box-shadow:0 0.05em 0.05em -0.01em rgba(var(--sh),1),0 0.01em 0.01em -0.01em rgba(var(--sh),.5),0.15em 0.3em 0.1em -0.01em rgba(var(--sh),.25)}
+.cta:hover .button-outer{box-shadow:0 0 0 0 rgba(var(--sh),1),0 0 0 0 rgba(var(--sh),.5),0 0 0 0 rgba(var(--sh),.25)}
+.cta .button-inner{position:relative;z-index:1;border-radius:inherit;padding:0.92em 1.5em;
+  background-image:linear-gradient(135deg,var(--g1),var(--g2));
+  transition:box-shadow 300ms ease,clip-path 250ms ease,transform 250ms ease;overflow:clip;clip-path:inset(0 0 0 0 round 999vw);
+  box-shadow:0 0 0 0 inset rgba(var(--sh),.1),-0.05em -0.05em 0.05em 0 inset rgba(var(--sh),.22),0 0 0 0 inset rgba(var(--sh),.1),0 0 0.05em 0.2em inset rgba(var(--hi),.22),0.025em 0.05em 0.1em 0 inset rgba(var(--hi),.92),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.25em 0.25em 0.1em inset rgba(var(--sh),.22)}
+.cta:hover .button-inner{clip-path:inset(clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) round 999vw);
+  box-shadow:0.1em 0.15em 0.05em 0 inset rgba(var(--sh),.7),-0.025em -0.03em 0.05em 0.025em inset rgba(var(--sh),.45),0.25em 0.25em 0.2em 0 inset rgba(var(--sh),.45),0 0 0.05em 0.5em inset rgba(var(--hi),.14),0 0 0 0 inset rgba(var(--hi),1),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.12em 0.2em 0.1em inset rgba(var(--sh),.22)}
+.cta .button-inner span{position:relative;z-index:4;font-family:var(--gb-font-body);letter-spacing:-0.02em;font-weight:600;
+  color:transparent;background-image:linear-gradient(135deg,var(--txt1),var(--txt2));-webkit-background-clip:text;background-clip:text;
+  transition:transform 250ms ease;display:block;user-select:none}
+.cta:hover .button-inner span{transform:scale(0.975)}
+.cta:active .button-inner{transform:scale(0.975)}
+.cta:focus-visible{outline:var(--gb-focus);outline-offset:3px}
+
+/* secondary flat pill */
+.pill{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:13px;padding:6px 24px 6px 6px;
+  border-radius:var(--gb-radius-pill);background:var(--gb-surface);
+  transition:filter .2s ease,transform .15s ease,box-shadow .2s ease}
+.pill:hover{filter:brightness(.975);transform:translateY(-1px);box-shadow:var(--gb-shadow-pill-hover)}
+.pill:active{transform:translateY(0)}
+.pill:focus-visible{outline:var(--gb-focus);outline-offset:3px}
+.pill .pchip{width:38px;height:38px;border-radius:50%;background:var(--gb-paper);display:inline-flex;
+  align-items:center;justify-content:center;flex:none}
+.pill .pchip svg{width:16px;height:16px;color:var(--gb-pill-ink)}
+.pill .lbl{color:var(--gb-pill-ink);white-space:nowrap;font-family:var(--gb-font-label);font-weight:500;
+  text-transform:uppercase;letter-spacing:var(--gb-cta-ls);font-size:13.5px}
+.pill.sm{gap:11px;padding:5px 20px 5px 5px}
+.pill.sm .pchip{width:34px;height:34px}.pill.sm .pchip svg{width:15px;height:15px}.pill.sm .lbl{font-size:13px}
+
+/* tertiary text link */
+.tlink{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:14px;color:var(--gb-clay);text-decoration:none;transition:color .18s ease}
+.tlink:hover{color:var(--gb-clay-dark);text-decoration:underline}
+.inline-link{color:var(--gb-clay);text-decoration:none}
+.inline-link:hover{color:var(--gb-clay-dark);text-decoration:underline}
+
+/* ===== CARDS ===== */
+.card-greige{background:var(--gb-surface);border-radius:var(--gb-radius-lg);box-shadow:var(--gb-shadow-card);
+  padding:30px 28px;max-width:320px}
+.card-tile{background:var(--gb-surface-tile);border-radius:var(--gb-radius-md);box-shadow:var(--gb-shadow-tile);
+  padding:22px;max-width:260px;display:flex;flex-direction:column;gap:12px}
+.icon-chip{width:38px;height:38px;border-radius:var(--gb-radius-xs);background:rgba(185,107,77,.10);
+  display:flex;align-items:center;justify-content:center}
+.card-title{font-weight:600;font-size:15px;letter-spacing:-.2px;margin:0}
+.card-body{font-size:13px;line-height:1.5;color:var(--gb-muted);margin:0;text-wrap:pretty}
+
+/* ===== FAQ ===== */
+.faq{max-width:680px}
+.faq details{border-bottom:var(--gb-border-hairline)}
+.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;
+  cursor:pointer;padding:22px 0;font-weight:600;font-size:17px;color:var(--gb-ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq .ic{flex:none;width:22px;height:22px;position:relative;transition:transform .3s var(--gb-ease)}
+.faq .ic span{position:absolute;background:var(--gb-clay);border-radius:2px}
+.faq .ic .h{top:10px;left:3px;width:16px;height:2px}
+.faq .ic .v{top:3px;left:10px;width:2px;height:16px}
+.faq details[open] .ic{transform:rotate(135deg)}
+.faq .ans{font-size:16px;line-height:1.6;color:var(--gb-muted);max-width:64ch;padding:0 0 22px;margin-top:-4px}
+
+/* ===== TICKER ===== */
+.ticker{overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.ticker .track{display:inline-flex;align-items:center;animation:gb-ticker 38s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.ticker span.role{font-size:clamp(16px,2vw,23px);color:var(--gb-ink)}
+.ticker span.dot{display:inline-block;margin:0 22px;color:var(--gb-clay);font-size:11px;transform:translateY(-2px)}
+@keyframes gb-ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ===== STATS ===== */
+.stats{display:flex;flex-wrap:wrap;gap:24px 72px}
+.stat .n{font-family:var(--gb-font-display);font-weight:400;font-size:44px;line-height:1;letter-spacing:var(--gb-title-ls)}
+.stat .l{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:14px;color:var(--gb-clay);margin-top:12px}
+
+/* ===== COMPARISON TABLE ===== */
+.cmp{display:grid;grid-template-columns:1.25fr 1fr 1fr;max-width:760px;text-align:left}
+.cmp .hd{font-weight:600;font-size:16px;padding:16px 20px;border-bottom:var(--gb-border-hairline)}
+.cmp .hd.gb{background:var(--gb-surface);border-radius:16px 16px 0 0;text-align:center}
+.cmp .hd.rec{color:var(--gb-muted);text-align:center}
+.cmp .dim{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:13px;color:var(--gb-muted);display:flex;align-items:center;padding:16px 12px 16px 4px;border-bottom:var(--gb-border-hairline)}
+.cmp .cell{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.4;padding:16px 20px}
+.cmp .cell.gb{background:var(--gb-surface);color:var(--gb-ink);border-bottom:1px solid rgba(33,78,63,.12)}
+.cmp .cell.rec{color:var(--gb-muted);border-bottom:var(--gb-border-hairline)}
+.cmp .cell.gb.last{border-radius:0 0 16px 16px;border-bottom:0}
+.cmp .cell.rec.last{border-bottom:0}
+.cmp svg{flex:none;width:20px;height:20px;margin-top:1px}
+
+/* ===== FORM (proposed) ===== */
+.form{max-width:420px;display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-weight:500;font-size:14px}
+.field input,.field textarea,.field select{font-family:var(--gb-font-body);font-size:16px;color:var(--gb-ink);
+  background:var(--gb-surface-tile);border:1px solid var(--gb-hairline);border-radius:12px;padding:12px 14px;outline:none;
+  transition:border-color .18s ease,box-shadow .18s ease}
+.field input::placeholder,.field textarea::placeholder{color:var(--gb-meta)}
+.field input:hover,.field textarea:hover{border-color:#CDBFAA}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gb-clay);box-shadow:0 0 0 3px rgba(185,107,77,.14)}
+.field .help{font-size:13px;color:var(--gb-muted)}
+.field.err input{border-color:var(--gb-clay-dark)}
+.field.err .help{color:var(--gb-clay-dark)}
+.field input:disabled{opacity:.55;cursor:not-allowed;background:var(--gb-surface)}
+
+/* ===== AVATARS ===== */
+.avatars{display:flex;gap:18px;flex-wrap:wrap}
+.av{text-align:center;width:120px}
+.av .tile{width:100%;aspect-ratio:1/1;border-radius:var(--gb-radius-md);
+  background:linear-gradient(150deg,#EFE2D2,#EADBCE);display:flex;align-items:center;justify-content:center;
+  font-family:var(--gb-font-display);font-size:40px;color:var(--gb-clay-dark);
+  box-shadow:var(--gb-shadow-tile),0 10px 22px rgba(0,0,0,.05)}
+.av .nm{font-weight:600;font-size:16px;margin-top:12px}
+.av .ro{font-family:var(--gb-font-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em;
+  font-size:11px;color:var(--gb-clay);margin-top:6px}
+.av .circ{border-radius:50%}
+
+/* badges / ticks */
+.reassure{display:flex;flex-wrap:wrap;gap:10px 24px}
+.reassure span{display:inline-flex;align-items:center;gap:8px;font-family:var(--gb-font-label);font-weight:500;
+  font-size:14px;letter-spacing:.5px;color:var(--gb-ink)}
+.reassure svg{flex:none;width:18px;height:18px}
+
+/* wordmark */
+.brand-pill{display:inline-block;font-weight:600;font-size:18px;color:var(--gb-ink);
+  border:1.5px solid var(--gb-ink);border-radius:var(--gb-radius-pill);padding:7px 16px}
+
+/* trusted logos */
+.logos{display:flex;align-items:center;flex-wrap:wrap;gap:30px 60px}
+.logos .lg{font-family:var(--gb-font-display);font-weight:700;font-size:20px;color:var(--gb-ink);opacity:.45;
+  transition:opacity .3s ease,transform .3s ease;cursor:pointer}
+.logos .lg:hover{opacity:1;transform:scale(1.04)}
+
+/* footer demo */
+.fcols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;max-width:820px;padding-top:8px}
+.fcols h4{font-family:var(--gb-font-label);text-transform:uppercase;letter-spacing:.06em;font-size:14px;
+  color:var(--gb-clay);margin:0 0 16px;font-weight:500}
+.fcols a{display:block;font-size:15px;color:var(--gb-ink);text-decoration:none;margin-bottom:11px;transition:color .2s ease}
+.fcols a:hover{color:var(--gb-clay)}
+.fcols .blurb{font-size:15px;line-height:1.5;color:var(--gb-muted);max-width:30ch;margin-top:16px}
+
+footer.page{padding:56px 0 90px;color:var(--gb-muted);font-size:13px;position:relative;z-index:1}
+
+@media (max-width:760px){
+  .cmp{grid-template-columns:1fr}
+  .cmp .hd,.cmp .dim{display:none}
+  .fcols{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="doc-head">
+  <div class="wrap">
+    <p class="doc-eyebrow">Design system · v1.0</p>
+    <h1 class="doc-title">Growthbuddy <em>components</em> &amp; tokens</h1>
+    <p class="doc-sub">A living reference for the warm, editorial Growthbuddy system — every token, type style and component, rendered from the same CSS custom properties a developer copies into Astro. Derived from the approved homepage folds.</p>
+    <nav class="index" aria-label="Section index">
+      <a href="#colour">Colour</a>
+      <a href="#type">Type</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#radii">Radii</a>
+      <a href="#shadows">Shadows</a>
+      <a href="#nav">Navigation</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#links">Links</a>
+      <a href="#pills">Pills &amp; tags</a>
+      <a href="#cards">Cards</a>
+      <a href="#section-header">Section header</a>
+      <a href="#faq">FAQ</a>
+      <a href="#ticker">Ticker</a>
+      <a href="#stats">Stats</a>
+      <a href="#table">Comparison</a>
+      <a href="#forms">Forms</a>
+      <a href="#avatars">Avatars</a>
+      <a href="#badges">Badges</a>
+      <a href="#wordmark">Wordmark</a>
+      <a href="#trusted">Trusted by</a>
+      <a href="#footer">Footer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- COLOUR -->
+  <section id="colour">
+    <p class="sec-label">Foundations</p>
+    <h2 class="sec-title">Colour</h2>
+    <p class="sec-note">Paper page, greige surfaces, near-white tiles, one clay accent. Forest green lives only inside the tint set. All contrast pairings clear AA or better for their use.</p>
+
+    <p class="cap" style="margin-bottom:12px">Core tokens</p>
+    <div class="swatches" id="core-swatches"></div>
+
+    <p class="cap" style="margin:32px 0 12px">Hero gold ramp · CTA gradients</p>
+    <div class="swatches" id="gold-swatches"></div>
+
+    <p class="cap" style="margin:32px 0 12px">Multi-hue tint / category set — background + on-text</p>
+    <div class="tintset" id="tintset"></div>
+  </section>
+
+  <!-- TYPE -->
+  <section id="type">
+    <p class="sec-label">Foundations</p>
+    <h2 class="sec-title">Typography</h2>
+    <p class="sec-note">Libre Baskerville (display), Inter (body/UI), Space Grotesk (labels). The signature move: exactly one clay italic word per serif heading. Eyebrows are always Medium (500).</p>
+    <div class="demo">
+      <div class="spec"><p class="specimen-display">Hire <em>sharper</em> talent.</p><p class="cap">Display / Hero H1 · Libre Baskerville 700 · clamp(38–66px) · ls -0.07em</p></div>
+      <div class="spec"><p class="specimen-title">Not your typical <em>recruiter</em></p><p class="cap">Section title · Libre Baskerville 700 · 48px · ls -3.5px</p></div>
+      <div class="spec"><p class="specimen-statement">Good people are harder to find than ever.</p><p class="cap">Scroll-ink statement · Libre Baskerville 400 · clamp(24–34px) · lh 1.46</p></div>
+      <div class="spec"><p class="specimen-stat">~2 years</p><p class="cap">Stat number · Libre Baskerville 400 · 48px · ls -3.5px</p></div>
+      <div class="spec"><p class="specimen-eyebrow">Our expertise</p><p class="cap">Eyebrow · Space Grotesk <strong>500</strong> · 14px · UPPER · ls 0.06em · clay</p></div>
+      <div class="spec"><p class="specimen-lede">Tell us what you need. We'll do the hard part — and stay with you after the hire.</p><p class="cap">Lede / section sub · Inter 400 · 19px · muted</p></div>
+      <div class="spec"><p class="specimen-body">We find highly capable people globally, vet them deeply and manage their performance after they join your team.</p><p class="cap">Body · Inter 400 · 16px · lh 1.6</p></div>
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section id="spacing">
+    <p class="sec-label">Foundations</p>
+    <h2 class="sec-title">Spacing</h2>
+    <p class="sec-note">4px base unit. Section padding <span class="muted-code">clamp(72px, 10vw, 120px)</span> vertical · 24px gutter (20px ≤768).</p>
+    <div class="demo"><div class="sp-row" id="sp-row"></div></div>
+  </section>
+
+  <!-- RADII -->
+  <section id="radii">
+    <p class="sec-label">Foundations</p>
+    <h2 class="sec-title">Radii</h2>
+    <p class="sec-note">Pills are fully round; cards 20px, feature panels 24px, the hero CTA card 28px.</p>
+    <div class="demo"><div class="rad-row" id="rad-row"></div></div>
+  </section>
+
+  <!-- SHADOWS -->
+  <section id="shadows">
+    <p class="sec-label">Foundations</p>
+    <h2 class="sec-title">Shadows / elevation</h2>
+    <p class="sec-note">Neutral soft shadows for resting cards; warm <span class="muted-code">rgba(74,47,23,…)</span> ink for lifted chrome (nav, mega, pill hover). Never combine a hairline border with a drop shadow.</p>
+    <div class="demo"><div class="sh-row" id="sh-row"></div></div>
+  </section>
+
+  <!-- NAV -->
+  <section id="nav">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Top navigation</h2>
+    <p class="sec-note">Transparent over the hero; glass once scrolled, where the secondary <em>Book a call</em> pill fades in. Mega-menus carry Sanity-driven taxonomy.</p>
+
+    <p class="cap" style="margin-bottom:10px">At top of hero — transparent, CTA hidden</p>
+    <div class="demo" style="background:linear-gradient(135deg,#D7AD63,#C2954E)">
+      <div class="navbar plain">
+        <span class="nav-word" style="color:var(--gb-ink-hero)">Growthbuddy</span>
+        <a class="nav-link" style="color:var(--gb-ink-hero)">How it works</a>
+        <a class="nav-link" style="color:var(--gb-ink-hero)">Pricing</a>
+        <a class="nav-link" style="color:var(--gb-ink-hero)">Roles ⌄</a>
+        <a class="nav-link" style="color:var(--gb-ink-hero)">Industries ⌄</a>
+        <span class="nav-spacer"></span>
+      </div>
+    </div>
+
+    <p class="cap" style="margin:22px 0 10px">Scrolled — glass bar, CTA visible</p>
+    <div class="demo">
+      <div class="navbar">
+        <span class="nav-word">Growthbuddy</span>
+        <a class="nav-link">How it works</a>
+        <a class="nav-link">Pricing</a>
+        <a class="nav-link">Roles ⌄</a>
+        <a class="nav-link">Industries ⌄</a>
+        <span class="nav-spacer"></span>
+        <button class="pill sm"><span class="pchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="18" y2="12"></line><polyline points="12.5 6.5 18 12 12.5 17.5"></polyline></svg></span><span class="lbl">Book a call</span></button>
+      </div>
+    </div>
+
+    <p class="cap" style="margin:22px 0 10px">Mega-menu — Resources variant</p>
+    <div class="demo">
+      <div class="mega-card">
+        <div class="mega-col">
+          <span class="mega-label">Learn</span>
+          <a class="mega-item">Blog<small>Hiring insights &amp; playbooks</small></a>
+          <a class="mega-item">Guides<small>Build your global team</small></a>
+          <a class="mega-item">Case studies<small>How teams scale with us</small></a>
+        </div>
+        <div class="mega-col">
+          <span class="mega-label">Company</span>
+          <a class="mega-item">About us</a>
+          <a class="mega-item">How it works</a>
+          <a class="mega-item">Careers</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section id="buttons">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Buttons</h2>
+    <p class="sec-note">Two tiers. Primary = the locked neumorphic gold CTA (hero only). Secondary = the card-cream flat pill (everywhere else). Both label in Space Grotesk 500.</p>
+
+    <p class="cap" style="margin-bottom:12px">Primary — gold (locked, hero) · paper variant</p>
+    <div class="demo" style="display:flex;gap:40px;flex-wrap:wrap;align-items:center">
+      <div><button class="cta"><span class="button-outer"><span class="button-inner"><span>Start your search →</span></span></span></button><p class="cap">Gold fill · dark text · hero &amp; scrolled hero-nav</p></div>
+      <div><button class="cta paper"><span class="button-outer"><span class="button-inner"><span>Start your search →</span></span></span></button><p class="cap">Paper variant · clay-peach fill (e.g. on Pricing)</p></div>
+    </div>
+
+    <p class="cap" style="margin:24px 0 12px">Secondary — card-cream flat pill (site-wide standard)</p>
+    <div class="demo row">
+      <button class="pill"><span class="pchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="18" y2="12"></line><polyline points="12.5 6.5 18 12 12.5 17.5"></polyline></svg></span><span class="lbl">Start your search</span></button>
+      <button class="pill sm"><span class="pchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="18" y2="12"></line><polyline points="12.5 6.5 18 12 12.5 17.5"></polyline></svg></span><span class="lbl">Book a call</span></button>
+    </div>
+
+    <p class="cap" style="margin:24px 0 12px">Tertiary — text-link CTA</p>
+    <div class="demo row"><a class="tlink" href="#buttons">See all roles →</a><a class="tlink" href="#buttons">See pricing →</a></div>
+  </section>
+
+  <!-- LINKS -->
+  <section id="links">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Text links</h2>
+    <p class="sec-note">Clay at rest, clay-dark + underline on hover. Inside body copy keep the underline-on-hover affordance.</p>
+    <div class="demo"><p class="specimen-body">You're only charged while they stay. <a class="inline-link" href="#links">See pricing →</a> for the full breakdown, or <a class="inline-link" href="#links">book a call</a> with the founders.</p></div>
+  </section>
+
+  <!-- PILLS -->
+  <section id="pills">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Pills &amp; tags</h2>
+    <p class="sec-note">Flat tinted category pills (no border/shadow) from the multi-hue set; tiny status pills with a clay dot.</p>
+    <div class="demo">
+      <div class="tintset" id="tintpills"></div>
+      <div class="row" style="margin-top:22px">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-family:var(--gb-font-label);text-transform:uppercase;letter-spacing:.04em;font-size:11px;color:var(--gb-clay)"><span style="width:6px;height:6px;border-radius:50%;background:var(--gb-clay)"></span>Active</span>
+        <span class="brand-pill">Growthbuddy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section id="cards">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Cards &amp; panels</h2>
+    <p class="sec-note">Greige card (the "module" surface) and the near-white inner tile (quiet bento cell). Fill + shadow, never a border.</p>
+    <div class="demo row" style="align-items:stretch">
+      <div class="card-greige">
+        <p class="specimen-eyebrow" style="font-size:13px">Starting from</p>
+        <p class="specimen-stat" style="font-size:44px;margin:8px 0 4px">$3,000</p>
+        <p class="card-body">A fixed monthly fee per role — and only while they stay.</p>
+      </div>
+      <div class="card-tile">
+        <div class="icon-chip"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+        <h3 class="card-title">We do the hiring &amp; vetting for you.</h3>
+        <p class="card-body">We scan thousands, run technical interviews, then check for culture fit.</p>
+      </div>
+      <div class="card-tile">
+        <div class="icon-chip"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.2 L7 22 L12 19 L17 22 L15.5 13.2"></path></svg></div>
+        <h3 class="card-title">3+ years of experience.</h3>
+        <p class="card-body">They already know the job, so you're not training from scratch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION HEADER -->
+  <section id="section-header">
+    <p class="sec-label">Pattern</p>
+    <h2 class="sec-title">Section-header rhythm</h2>
+    <p class="sec-note">Eyebrow → 16px → title (one clay italic word) → 16px → lede → 56px → content. The opening move for nearly every section.</p>
+    <div class="demo" style="text-align:center">
+      <p class="specimen-eyebrow">How we compare</p>
+      <h3 class="specimen-title" style="margin:16px 0">Not your typical <em>recruiter</em></h3>
+      <p class="specimen-lede" style="margin:0 auto">Same goals, but a very different way of getting there.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">FAQ accordion</h2>
+    <p class="sec-note">Native <span class="muted-code">&lt;details&gt;</span>, hairline rows, a clay plus icon that rotates 135° to ×. Ships with FAQPage JSON-LD. One row open by default.</p>
+    <div class="demo">
+      <div class="faq">
+        <details open><summary>Where do the team members work?<span class="ic"><span class="h"></span><span class="v"></span></span></summary><div class="ans">They work remotely, aligned to your business hours, so they're online exactly when your team is — they join your meetings, use your tools, and live in your Slack channels day to day.</div></details>
+        <details><summary>Who employs them?<span class="ic"><span class="h"></span><span class="v"></span></span></summary><div class="ans">We do — every team member is officially employed by Growthbuddy and sits on our payroll, so the contracts, taxes and compliance never land on your desk.</div></details>
+        <details><summary>What if it doesn't work out?<span class="ic"><span class="h"></span><span class="v"></span></span></summary><div class="ans">We step in and find you a replacement at no extra cost — and because you only pay while someone is active, you're never locked in. <a class="inline-link" href="#faq">See pricing →</a></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <section id="ticker">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Role / industry ticker</h2>
+    <p class="sec-note">Opposed marquee rows, edge-masked, clay dot separators. Hover pauses; reduced-motion freezes it.</p>
+    <div class="demo">
+      <div class="ticker" id="ticker1"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Stat block</h2>
+    <p class="sec-note">Serif number + clay Medium label. Numbers stay textual.</p>
+    <div class="demo">
+      <div class="stats">
+        <div class="stat"><div class="n">3 weeks</div><div class="l">to make a hire</div></div>
+        <div class="stat"><div class="n">60%</div><div class="l">lower cost than a local hire</div></div>
+        <div class="stat"><div class="n">~2 years</div><div class="l">average tenure</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <section id="table">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Comparison table</h2>
+    <p class="sec-note">Growthbuddy column is a continuous greige panel with clay checks; the recruiter column is plain with muted ✕ (never red). Collapses to one column on mobile.</p>
+    <div class="demo">
+      <div class="cmp" id="cmp"></div>
+    </div>
+  </section>
+
+  <!-- FORMS -->
+  <section id="forms">
+    <p class="sec-label">Component<span class="proposed">Proposed</span></p>
+    <h2 class="sec-title">Form inputs</h2>
+    <p class="sec-note">Inferred from the system — tile surface, hairline border, clay focus ring. For CMS/contact forms.</p>
+    <div class="demo">
+      <div class="form">
+        <div class="field"><label for="f1">Full name</label><input id="f1" type="text" placeholder="Jane Doe"></div>
+        <div class="field"><label for="f2">Work email</label><input id="f2" type="email" placeholder="jane@company.com"><span class="help">We'll only use this to set up your call.</span></div>
+        <div class="field err"><label for="f3">Team size</label><input id="f3" type="text" value="abc"><span class="help">Please enter a number.</span></div>
+        <div class="field"><label for="f4">Disabled</label><input id="f4" type="text" value="Not editable" disabled></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVATARS -->
+  <section id="avatars">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Avatars / initials</h2>
+    <p class="sec-note">Gradient initial tile is the no-photo fallback; circular variant <span class="proposed">Proposed</span> for candidate-profile headers.</p>
+    <div class="demo">
+      <div class="avatars">
+        <div class="av"><div class="tile">A</div><div class="nm">Avani</div><div class="ro">Co-founder</div></div>
+        <div class="av"><div class="tile">S</div><div class="nm">Srikant</div><div class="ro">Co-founder</div></div>
+        <div class="av"><div class="tile circ">H</div><div class="nm">Harshita</div><div class="ro">Analyst</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section id="badges">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Badges &amp; ticks</h2>
+    <p class="sec-note">Clay circle-checks for reassurance and Growthbuddy cells; muted ✕ for the recruiter column.</p>
+    <div class="demo">
+      <div class="reassure">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>No upfront fee</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>Pay only while they stay</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>Replacement guaranteed</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORDMARK -->
+  <section id="wordmark">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Logo / wordmark</h2>
+    <p class="sec-note">Always "Growthbuddy", capital G only. Nav uses the image wordmark at 30px; the outline pill is the footer/brand-mark treatment.</p>
+    <div class="demo row"><span class="brand-pill">Growthbuddy</span><span class="nav-word" style="font-size:22px">Growthbuddy</span></div>
+  </section>
+
+  <!-- TRUSTED -->
+  <section id="trusted">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Trusted-by strip</h2>
+    <p class="sec-note">Logos at 45% opacity, brighten and scale 1.04 on hover. Preceded by a "Trusted by" eyebrow. (Wordmarks shown as text stand-ins here.)</p>
+    <div class="demo">
+      <p class="specimen-eyebrow" style="margin-bottom:24px">Trusted by</p>
+      <div class="logos"><span class="lg">Manual</span><span class="lg">Spekk</span><span class="lg">Tread Partners</span><span class="lg">YellowFin</span><span class="lg">archa</span><span class="lg">3Dctrl</span></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <section id="footer">
+    <p class="sec-label">Component</p>
+    <h2 class="sec-title">Footer</h2>
+    <p class="sec-note">Brand blurb + two link columns under eyebrow headings; hairline sub-bar with legal links. Hover is always clay.</p>
+    <div class="demo">
+      <div class="fcols">
+        <div>
+          <span class="brand-pill">Growthbuddy</span>
+          <p class="blurb">We find highly capable people globally, vet them deeply and manage their performance after they join your team.</p>
+        </div>
+        <div><h4>Explore</h4><a>How it works</a><a>Pricing</a><a>Roles</a><a>Client stories</a></div>
+        <div><h4>Company</h4><a>Book a call</a><a>Contact</a><a>About</a></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page">
+  <div class="wrap">© 2026 Growthbuddy Limited. Components reference — generated from the approved designs. Tokens in <span class="muted-code">growthbuddy-design-system.md</span> §D.</div>
+</footer>
+
+<script>
+/* ---------- data ---------- */
+const CORE = [
+  ['--gb-paper','#FAF4EA','Page background'],
+  ['--gb-surface','#ECE4D5','Greige card / panel'],
+  ['--gb-surface-tile','#FCF9F2','Near-white inner tile'],
+  ['--gb-hairline','#DED5C6','1px divider'],
+  ['--gb-ink','#181A1F','Primary text'],
+  ['--gb-ink-warm','#1B2420','Ink on greige'],
+  ['--gb-muted','#5E6269','Secondary text'],
+  ['--gb-clay','#B96B4D','Primary accent'],
+  ['--gb-clay-dark','#9E5740','Hover / focus'],
+  ['--gb-forest','#355A47','Secondary (tint only)'],
+];
+const GOLD = [
+  ['--gb-gold-hi','#F3DEA0','Hero highlight'],
+  ['--gb-gold','#D7AD63','Hero base'],
+  ['--gb-gold-mid','#C2954E','Hero mid'],
+  ['--gb-gold-deep','#A9762F','Hero deep'],
+  ['--gb-cta-gold-1','#DCBC72','CTA gold top'],
+  ['--gb-cta-gold-2','#CBA862','CTA gold bottom'],
+  ['--gb-cta-clay-1','#E7B79A','CTA paper top'],
+  ['--gb-cta-clay-2','#D89C72','CTA paper bottom'],
+];
+const TINTS = [
+  ['Sage','#D8E5DB','#355A47'],['Olive','#E3E4C6','#57581F'],['Wheat','#F1E4BE','#74571B'],
+  ['Sand','#F4DDC2','#8A5A2A'],['Clay-peach','#F1D8C9','#8C4B33'],['Rose','#ECD8D6','#864E4A'],['Teal','#CFE0D6','#2D5747'],
+];
+const SPACE = [['1',4],['2',8],['3',12],['4',16],['5',22],['6',24],['7',32],['8',40],['9',48],['10',56],['12',72]];
+const RADII = [['xs',10],['sm',14],['md',16],['lg',20],['xl',24],['2xl',28],['pill',999]];
+const SHADOWS = [
+  ['tile','var(--gb-shadow-tile)'],['card','var(--gb-shadow-card)'],['panel','var(--gb-shadow-panel)'],
+  ['fan','var(--gb-shadow-fan)'],['float','var(--gb-shadow-float)'],['nav','var(--gb-shadow-nav)'],['mega','var(--gb-shadow-mega)'],
+];
+const ROLES = ['Performance Marketer','Operations Manager','Google Ads Expert','Financial Analyst','Social Media Manager','Growth Marketing Manager','Account Manager','Project Manager','SEO Expert'];
+const CMP = [
+  ['When you pay','A monthly fee, only while they stay.','A large fee up front, win or lose.'],
+  ["If it doesn't work out",'We replace them, and you stop paying.',"Often your problem — the fee's already spent."],
+  ['What you get','One to three hand-picked, vetted people.','A stack of CVs to sift through yourself.'],
+  ['After the hire','Payroll, monthly check-ins, and coaching.','They move on to the next placement.'],
+];
+
+/* ---------- render ---------- */
+function swatch(arr,id){
+  const dark = ['#FAF4EA','#ECE4D5','#FCF9F2','#DED5C6','#F3DEA0','#D7AD63','#DCBC72','#CBA862','#E7B79A','#D89C72','#C2954E'];
+  document.getElementById(id).innerHTML = arr.map(([t,h,r])=>`
+    <div class="sw"><div class="chip" style="background:${h}"></div>
+    <div class="meta"><div class="nm">${t.replace('--gb-','')}</div><div class="hex">${h}</div><div class="role">${r}</div></div></div>`).join('');
+}
+swatch(CORE,'core-swatches'); swatch(GOLD,'gold-swatches');
+
+function tintHTML(){return TINTS.map(([n,bg,tx])=>`<span class="tp" style="background:${bg};color:${tx}">${n}</span>`).join('');}
+document.getElementById('tintset').innerHTML = tintHTML();
+document.getElementById('tintpills').innerHTML = ['Agencies','Startups','Consulting firms','Marketing teams','Operations teams','Finance teams','10–150 employees']
+  .map((l,i)=>{const [,bg,tx]=TINTS[i%TINTS.length];return `<span class="tp" style="background:${bg};color:${tx}">${l}</span>`;}).join('');
+
+document.getElementById('sp-row').innerHTML = SPACE.map(([k,v])=>`
+  <div class="sp"><div class="bar" style="height:${v}px"></div><div class="lbl">${v}</div></div>`).join('');
+
+document.getElementById('rad-row').innerHTML = RADII.map(([k,v])=>`
+  <div class="rad"><div class="box" style="border-radius:${v>=999?'999px':v+'px'}"></div><div class="lbl">${k} · ${v>=999?'999':v}</div></div>`).join('');
+
+document.getElementById('sh-row').innerHTML = SHADOWS.map(([k,v])=>`
+  <div class="sh" style="box-shadow:${v}"><span>${k}</span></div>`).join('');
+
+/* ticker — duplicate list for seamless loop */
+const tk = ROLES.concat(ROLES).map(r=>`<span class="role">${r}</span><span class="dot">•</span>`).join('');
+document.getElementById('ticker1').innerHTML = `<div class="track">${tk}</div>`;
+
+/* comparison */
+const check = `<svg viewBox="0 0 24 24" fill="none" stroke="#B96B4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>`;
+const cross = `<svg viewBox="0 0 24 24" fill="none" stroke="#AEA89E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 9l6 6M15 9l-6 6"></path></svg>`;
+let cmpHTML = `<div class="hd"></div><div class="hd gb">Growthbuddy</div><div class="hd rec">Typical recruiter</div>`;
+CMP.forEach((row,i)=>{
+  const last = i===CMP.length-1?' last':'';
+  cmpHTML += `<div class="dim">${row[0]}</div>
+    <div class="cell gb${last}">${check}<span>${row[1]}</span></div>
+    <div class="cell rec${last}">${cross}<span>${row[2]}</span></div>`;
+});
+document.getElementById('cmp').innerHTML = cmpHTML;
+</script>
+</body>
+</html>

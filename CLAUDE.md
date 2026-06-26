@@ -36,3 +36,16 @@ Cloudflare Pages hosting. Production domain: https://www.mygrowthbuddy.com — *
 
 ## Reference docs (in the Claude Project knowledge, not this repo)
 architecture-and-implementation-plan, seo-reconciliation-and-keyword-map, claude-design-prompts (design spec), project-handoff.
+
+## Role pages are 100% CMS-driven (never hardcode)
+- Render at /hire/[slug] from ONE dynamic route (src/pages/hire/[slug].astro) using getStaticPaths()
+  over Sanity `role` documents. The slug is a CMS field. Adding a role in Sanity + publishing generates
+  /hire/<slug> on the next build. NEVER create per-role .astro files or hardcode any role URL.
+- The `role` schema includes: title, slug (unique, editable), function (Marketing | Sales | Operations |
+  Finance), + content fields. The /hire hub lists roles grouped by `function`.
+
+## Copy source of truth (changed)
+- For any section that HAS a design, take copy DIRECTLY from the design export in /design-reference
+  (these reflect my latest edits). growthbuddy-homepage-copy.md is SUPERSEDED for designed sections.
+- If a section/page needs copy and has NO design, STOP and ASK me for the copy. Never invent or
+  placeholder copy for a real page.
