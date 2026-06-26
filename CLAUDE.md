@@ -15,6 +15,7 @@ Cloudflare Pages hosting. Production domain: https://www.mygrowthbuddy.com — *
   Inter (body), Space Grotesk (eyebrows/labels, UPPERCASE, 14px).
 - Use the CSS variables in tokens.css for every colour/space/radius. Don't hardcode hexes in components.
 - Homepage sections must match the approved Claude Design mocks EXACTLY (fidelity clause). Don't reinterpret.
+- Design source of truth is /design-reference/growthbuddy-design-system.md + the per-fold HTML exports + src/styles/tokens.css (tokens are --gb-*). The old growthbuddy-claude-design-prompts.md and the fold mocks are historical, not build references.
 
 ## URL conventions
 - lowercase, hyphenated, **no trailing slash**.
