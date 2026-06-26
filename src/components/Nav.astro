@@ -1,18 +1,219 @@
 ---
+/*
+  Site navigation (design-system §B.1, matched to "Fold 1 – Hero.html").
+  - Transparent over the gold hero; turns glass + gains --gb-shadow-nav and
+    reveals the CTA once scrolled past 8px (.scrolled).
+  - Mega-menus (Roles / Industries / Resources) are Sanity-driven and deferred
+    to a later phase; rendered as plain links for now.
+  - One small island (idle-loaded vanilla script) drives the ≤980px mobile
+    sheet + the scrolled state. Keyboard-operable, closes on Esc / outside
+    click / resize; motion is governed by the global reduced-motion rule.
+*/
 const links = [
-  { label: "How it works", href: "/how-it-works" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Roles", href: "/hire" },
-  { label: "Industries", href: "/industries" },
-  { label: "Resources", href: "/resources" },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Roles', href: '#roles' },
+  { label: 'Industries', href: '/industries' },
+  { label: 'Resources', href: '/resources' },
 ];
 ---
-<header style="border-bottom:1px solid var(--gb-hairline);">
-  <nav class="container" aria-label="Primary" style="display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px;">
-    <a href="/" style="font-family:var(--gb-font-body);font-weight:600;font-size:18px;">Growthbuddy</a>
-    <ul style="display:flex;gap:28px;list-style:none;font-size:15px;">
-      {links.map((l) => (<li><a href={l.href}>{l.label}</a></li>))}
+<nav class="nav" id="gb-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/" aria-label="Growthbuddy home">
+      <span class="wordmark">Growthbuddy</span>
+    </a>
+
+    <ul class="nav-links">
+      {links.map((l) => (
+        <li class="nav-item"><a class="nav-link" href={l.href}>{l.label}</a></li>
+      ))}
     </ul>
-    <a href="/book-a-call" style="background:var(--gb-clay);color:var(--gb-paper);padding:10px 18px;border-radius:999px;font-size:15px;font-weight:500;">Book a call</a>
-  </nav>
-</header>
+
+    <div class="nav-cta-wrap">
+      <a class="pill nav-cta" href="/book-a-call">
+        <span class="chip" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="12" x2="18" y2="12"></line>
+            <polyline points="12.5 6.5 18 12 12.5 17.5"></polyline>
+          </svg>
+        </span>
+        <span class="lbl">Book a call</span>
+      </a>
+      <button class="nav-burger" id="gb-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="gb-mobile-sheet">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-sheet" id="gb-mobile-sheet" hidden>
+    {links.map((l) => (
+      <a class="m-link" href={l.href}>{l.label}</a>
+    ))}
+    <a class="pill m-cta" href="/book-a-call">
+      <span class="chip" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="18" y2="12"></line>
+          <polyline points="12.5 6.5 18 12 12.5 17.5"></polyline>
+        </svg>
+      </span>
+      <span class="lbl">Book a call</span>
+    </a>
+  </div>
+</nav>
+
+<style>
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    transition:background .32s ease, box-shadow .32s ease, border-color .32s ease, backdrop-filter .32s ease;
+    border-bottom:1px solid transparent;
+  }
+  /* Glass appears only once scrolled (or when the mobile sheet is open). */
+  .nav.scrolled, .nav.menu-open{
+    background:rgba(250,244,234,.7);
+    -webkit-backdrop-filter:blur(12px) saturate(1.1);
+    backdrop-filter:blur(12px) saturate(1.1);
+    border-bottom:var(--gb-border-glass);
+    box-shadow:var(--gb-shadow-nav);
+  }
+  .nav-inner{
+    max-width:var(--gb-bp-2xl); margin:0 auto; height:72px; padding:0 30px;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  /* Outline-pill wordmark (§B.16 / §B.2) */
+  .nav-logo{flex:none; display:inline-flex; align-items:center; margin-right:20px; border-radius:var(--gb-radius-pill)}
+  .wordmark{
+    display:inline-block; font-family:var(--gb-font-body); font-weight:600; font-size:16px;
+    letter-spacing:-0.01em; color:var(--gb-ink);
+    border:1.5px solid var(--gb-ink); border-radius:var(--gb-radius-pill); padding:7px 16px;
+  }
+
+  .nav-links{list-style:none; margin:0; padding:0; display:flex; align-items:center; gap:2px}
+  .nav-item{position:relative}
+  .nav-link{
+    display:inline-flex; align-items:center; cursor:pointer; white-space:nowrap;
+    font-family:var(--gb-font-body); font-size:15px; font-weight:500; letter-spacing:-0.01em;
+    color:var(--gb-nav-ink); padding:9px 13px; border-radius:var(--gb-radius-xs);
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-link:hover{background:rgba(43,41,38,.07)}
+
+  .nav-cta-wrap{margin-left:auto; display:flex; align-items:center; gap:8px}
+  /* CTA hidden at the top of the hero, fades in once scrolled (§B.1). */
+  .nav .nav-cta{opacity:0; visibility:hidden; pointer-events:none; transition:opacity .3s ease, visibility .3s ease}
+  .nav.scrolled .nav-cta{opacity:1; visibility:visible; pointer-events:auto}
+
+  /* Secondary card-cream pill — site-wide standard CTA (§B.3) */
+  .pill{
+    display:inline-flex; align-items:center; gap:11px; padding:5px 20px 5px 5px;
+    border-radius:var(--gb-radius-pill); background:var(--gb-surface); cursor:pointer;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    transition:filter .2s ease, transform .15s ease, box-shadow .2s ease;
+  }
+  .pill:hover{filter:brightness(.975); transform:translateY(-1px); box-shadow:var(--gb-shadow-pill-hover)}
+  .pill:active{transform:translateY(0)}
+  .pill .chip{
+    width:34px; height:34px; border-radius:50%; background:var(--gb-paper); flex:none;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .pill .chip svg{width:15px; height:15px; color:var(--gb-pill-ink)}
+  .pill .lbl{
+    color:var(--gb-pill-ink); white-space:nowrap; font-family:var(--gb-font-label); font-weight:500;
+    text-transform:uppercase; letter-spacing:var(--gb-cta-ls); font-size:13px;
+  }
+
+  .nav-burger{
+    display:none; cursor:pointer; padding:8px; border:0; background:none; color:var(--gb-nav-ink);
+    border-radius:9px; transition:background .15s ease;
+  }
+  .nav-burger:hover{background:rgba(43,41,38,.07)}
+
+  .mobile-sheet{display:none}
+
+  /* ≤980px (--gb-bp-xl): links collapse into the burger sheet (§B.1). */
+  @media (max-width:980px){
+    .nav-links{display:none}
+    .nav-burger{display:inline-flex}
+    .nav-cta-wrap{gap:6px}
+    .mobile-sheet{
+      display:flex; flex-direction:column; gap:2px; margin:0 14px 14px; padding:10px;
+      background:rgba(252,247,238,.97);
+      -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+      border:var(--gb-border-glass); border-radius:18px;
+      box-shadow:0 22px 54px -22px rgba(74,47,23,.36);
+    }
+    .mobile-sheet[hidden]{display:none}
+    .m-link{
+      font-family:var(--gb-font-body); font-size:16px; font-weight:500; color:var(--gb-nav-ink);
+      padding:14px; border-radius:11px;
+    }
+    .m-link:hover{background:rgba(43,41,38,.07)}
+    .m-cta{margin-top:8px; align-self:flex-start; opacity:1; visibility:visible; pointer-events:auto}
+  }
+
+  @media (max-width:768px){
+    .nav-inner{height:62px; padding:0 18px}
+  }
+
+  .nav-link:focus-visible,
+  .nav-burger:focus-visible,
+  .pill:focus-visible,
+  .m-link:focus-visible,
+  .nav-logo:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+</style>
+
+<script>
+  // Nav island — idle-loaded so it never blocks first paint.
+  const run = () => {
+    const nav = document.getElementById('gb-nav');
+    const burger = document.getElementById('gb-burger');
+    const sheet = document.getElementById('gb-mobile-sheet');
+    if (!nav || !burger || !sheet) return;
+
+    // Scrolled (glass) state — threshold 8px per §B.1.
+    let ticking = false;
+    const syncScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 8);
+      ticking = false;
+    };
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(syncScroll);
+    }, { passive: true });
+    syncScroll();
+
+    // Mobile sheet toggle.
+    const isOpen = () => burger.getAttribute('aria-expanded') === 'true';
+    const open = () => {
+      burger.setAttribute('aria-expanded', 'true');
+      sheet.hidden = false;
+      nav.classList.add('menu-open');
+      const first = sheet.querySelector('a');
+      if (first instanceof HTMLElement) first.focus();
+    };
+    const close = (returnFocus = true) => {
+      burger.setAttribute('aria-expanded', 'false');
+      sheet.hidden = true;
+      nav.classList.remove('menu-open');
+      if (returnFocus) burger.focus();
+    };
+
+    burger.addEventListener('click', () => (isOpen() ? close() : open()));
+    // Close on Esc, on navigating a link, on outside click, and when leaving mobile width.
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) close(); });
+    sheet.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) close(false);
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (isOpen() && !nav.contains(e.target as Node)) close(false);
+    });
+    const mq = matchMedia('(min-width:981px)');
+    mq.addEventListener('change', (e) => { if (e.matches && isOpen()) close(false); });
+  };
+
+  if ('requestIdleCallback' in window) requestIdleCallback(run);
+  else setTimeout(run, 1);
+</script>

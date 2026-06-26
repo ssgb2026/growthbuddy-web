@@ -47,5 +47,9 @@ const fullTitle = title ? `${title} | ${siteName}` : `${siteName} — Remote hir
     <Nav />
     <main id="main"><slot /></main>
     <Footer />
+    <script>
+      import { initReveal } from '../components/home/_reveal';
+      initReveal();
+    </script>
   </body>
 </html>
