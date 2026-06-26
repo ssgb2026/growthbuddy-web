@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Grain from '../components/home/Grain.astro';
 import Hero from '../components/home/Hero.astro';
 import TrustedBy from '../components/home/TrustedBy.astro';
+import Problem from '../components/home/Problem.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
@@ -13,12 +14,15 @@ import TrustedBy from '../components/home/TrustedBy.astro';
     <TrustedBy />
   </div>
 
+  {/* Fold 2 — The Problem (scroll-ink statement). */}
+  <Problem />
+
   {/*
     Remaining homepage folds — built one at a time into src/components/home/:
-      2  The Problem        7  Behind Every Match
-      3  How We Compare     8  Pricing
-      4  How It Works       9  Team & FAQ
-      5  Roles we hire for  10 Final CTA & Footer
+      3  How We Compare     7  Behind Every Match
+      4  How It Works       8  Pricing
+      5  Roles we hire for  9  Team & FAQ
+      6  The Results        10 Final CTA & Footer
   */}
 </BaseLayout>
 

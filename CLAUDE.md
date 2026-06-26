@@ -19,11 +19,16 @@ Cloudflare Pages hosting. Production domain: https://www.mygrowthbuddy.com — *
 
 ## Interactive behaviour (homepage)
 - Interactive behaviour on the homepage is JS-driven and computed at runtime. The mock .html files show
-  only the RESTING state — reading their CSS alone produces a dead page. For every animated fold, implement
-  the mechanics from /design-reference/INTERACTIVE-BEHAVIOUR-SPEC.md and the matching *.dc.html
-  componentDidMount(), not inferred from markup. The bundled "Fold N" exports bury logic in a
-  <script type='__bundler/template'> blob — prefer the .dc.html source. Each effect is a small client island
-  that respects prefers-reduced-motion (jump to final state) and rAF-throttles scroll/pointer handlers.
+  only the RESTING state — reading their CSS alone produces a dead page. The mechanics cannot be inferred
+  from markup.
+- **The AUTHORITATIVE source for all interactive mechanics is /design-reference/INTERACTIVE-BEHAVIOUR-SPEC.md.**
+  Build every animated fold from the relevant section of that spec.
+- The bundled "Fold N" standalone exports bury their logic in a `<script type='__bundler/template'>` blob you
+  can't reliably read — use them only for resting-state copy/layout/structure, not for mechanics.
+- Only if a matching `*.dc.html` source file is actually present should you read its `componentDidMount()` as a
+  cross-check. If it's absent, the spec doc is sufficient — don't flag it as missing or block on it.
+- Each effect is a small client island that respects prefers-reduced-motion (jump to final state) and
+  rAF-throttles scroll/pointer handlers.
 
 ## URL conventions
 - lowercase, hyphenated, **no trailing slash**.
