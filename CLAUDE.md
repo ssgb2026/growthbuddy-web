@@ -30,6 +30,29 @@ Cloudflare Pages hosting. Production domain: https://www.mygrowthbuddy.com — *
 - Each effect is a small client island that respects prefers-reduced-motion (jump to final state) and
   rAF-throttles scroll/pointer handlers.
 
+## Performance budget (NON-NEGOTIABLE for every component and island)
+- **Animate only `transform` and `opacity`.** Never animate (on scroll, pointer, or hover) `box-shadow`,
+  `filter`, `color`, `background`, `width`/`height`, `top`/`left`, or `margin`/`padding` — they trigger paint
+  or layout every frame. To animate a shadow/glow, overlay a pseudo-element holding the bigger shadow and
+  transition ITS opacity. Hover "lift" = `transform: translateY()`; emphasis = `transform: scale()`.
+- **Never read layout in a scroll/pointer handler.** `getBoundingClientRect()`, `offsetTop`, `offsetHeight`
+  etc. force synchronous reflow. Measure once on load + resize, cache the values, and each frame compute
+  position from `window.scrollY` + the cached value. (Scroll-ink: cache each word's document-relative top
+  once, then per frame use `cachedTop - scrollY` — no DOM reads in the loop.)
+- All scroll/pointer/wheel/touch listeners use `{ passive: true }`. One `requestAnimationFrame` batch per
+  frame behind a `ticking` flag. No layout writes followed by reads in the same frame.
+- **Hover transitions:** explicit property list only (never `transition: all`), limited to
+  `transform`/`opacity` (a single-property `color` transition is OK). Durations 120–220ms.
+- Promote ONLY actively-animating elements to their own layer (`will-change: transform` or `translateZ(0)`)
+  and remove `will-change` when idle. Do not blanket-apply `will-change`.
+- **Paper grain:** a small tiling PNG/data-URI noise texture as a low-opacity `background-image`, NOT a
+  runtime SVG `fractalNoise` filter; avoid `mix-blend-mode` on large fixed overlays. If a blend is essential,
+  scope it to the element, add `isolation`, and confirm it doesn't repaint on scroll.
+- `backdrop-filter`: nav bar only, modest blur radius. Below-the-fold sections get `content-visibility: auto`
+  with `contain-intrinsic-size`. All images carry explicit `width`/`height` and use `astro:assets`;
+  below-fold images lazy-load.
+- **Target 60fps:** main-thread work under ~10ms/frame, verified with a 4–6× CPU throttle in DevTools.
+
 ## URL conventions
 - lowercase, hyphenated, **no trailing slash**.
 - Role pages live at **/hire/[role]** (nav label may say "Roles"). Industries at /industries/[slug].
