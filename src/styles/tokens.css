@@ -121,9 +121,11 @@
 
 /* ----------------------------------------------------------------------------
    GRAIN (per-section effect, not a token — documented here for reference):
-   • Hero grain: opacity .65, mix-blend-mode: overlay, contrast-boosted
-     desaturated fractalNoise (baseFrequency 0.78). See Hero export for verbatim.
-     [NOTE: this supersedes the old 0.25 hero grain — confirm it's intentional.]
-   • Paper grain (every non-hero section): fixed, opacity .05, mix-blend-mode:
-     multiply, fractalNoise baseFrequency 0.9, 160px tile.
+   Implemented per the CLAUDE.md performance budget as a static tiling noise PNG
+   (/img/grain.png, 128/160px) used as a low-opacity background-image — NOT a
+   runtime SVG fractalNoise filter, and with NO mix-blend-mode (a fixed/large
+   blended overlay janks scroll). Originally specced as overlay/multiply
+   fractalNoise; the PNG matches the look without the compositing cost.
+   • Hero grain: opacity ~.14, .hero::after (absolute), no blend.
+   • Paper grain: opacity .05, .gb-grain (fixed), no blend.
    ---------------------------------------------------------------------------- */

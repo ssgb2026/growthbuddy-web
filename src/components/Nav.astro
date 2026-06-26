@@ -139,8 +139,8 @@ const mobileLinks = [
 <style>
   .nav{
     position:fixed; top:0; left:0; right:0; z-index:50;
-    transition:background .32s ease, box-shadow .32s ease, border-color .32s ease, backdrop-filter .32s ease;
     border-bottom:1px solid transparent;
+    /* Glass snaps at the 8px threshold — no animated background/backdrop-filter. */
   }
   /* Glass appears only once scrolled (or when the mobile sheet is open). */
   .nav.scrolled, .nav.menu-open{
@@ -169,7 +169,7 @@ const mobileLinks = [
     display:inline-flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap;
     font-family:var(--gb-font-body); font-size:15px; font-weight:500; letter-spacing:-0.01em;
     color:var(--gb-nav-ink); padding:9px 13px; border:0; background:none; border-radius:var(--gb-radius-xs);
-    transition:background .15s ease, color .15s ease;
+    transition:color .15s ease; /* hover background snaps — no animated paint */
   }
   .nav-link:hover, .has-mega:hover > .nav-link, .has-mega:focus-within > .nav-link{background:rgba(43,41,38,.07)}
   .chev{transition:transform .22s ease; opacity:.5; margin-top:1px}
@@ -184,12 +184,19 @@ const mobileLinks = [
 
   /* Secondary card-cream pill — site-wide standard CTA (§B.3) */
   .pill{
+    position:relative;
     display:inline-flex; align-items:center; gap:11px; padding:5px 20px 5px 5px;
     border-radius:var(--gb-radius-pill); background:var(--gb-surface); cursor:pointer;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
-    transition:filter .2s ease, transform .15s ease, box-shadow .2s ease;
+    transition:transform .15s ease;
   }
-  .pill:hover{filter:brightness(.975); transform:translateY(-1px); box-shadow:var(--gb-shadow-pill-hover)}
+  /* Hover-lift shadow as an opacity-only pseudo — never animate box-shadow. */
+  .pill::after{
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    box-shadow:var(--gb-shadow-pill-hover); opacity:0; transition:opacity .2s ease;
+  }
+  .pill:hover{transform:translateY(-1px)}
+  .pill:hover::after{opacity:1}
   .pill:active{transform:translateY(0)}
   .pill .chip{
     width:34px; height:34px; border-radius:50%; background:var(--gb-paper); flex:none;

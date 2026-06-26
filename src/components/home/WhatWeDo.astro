@@ -49,7 +49,10 @@ const builtFor = [
 </noscript>
 
 <style>
-  .whatwedo{padding:clamp(84px, 10vw, 120px) 0}
+  /* Below the fold: skip off-screen rendering. contain-intrinsic-size reserves
+     the height so scroll position stays stable; the island recaches word tops on
+     contentvisibilityautostatechange when this section renders. */
+  .whatwedo{padding:clamp(84px, 10vw, 120px) 0; content-visibility:auto; contain-intrinsic-size:0 600px}
   .ww-inner{max-width:860px; margin:0 auto; padding:0 32px}
 
   .stmt{
@@ -152,6 +155,11 @@ const builtFor = [
     // Layout can shift after fonts / late images load — recache then.
     addEventListener('load', remeasure, { once: true });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+    // content-visibility:auto skips off-screen layout — recache when it renders.
+    const section = root.closest('section');
+    if (section) section.addEventListener('contentvisibilityautostatechange', (e: Event) => {
+      if (!(e as any).skipped) remeasure();
+    });
   };
 
   if (document.readyState !== 'loading') initInk();

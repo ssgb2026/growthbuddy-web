@@ -70,11 +70,12 @@ const faceRows = [
       radial-gradient(95% 95% at 82% 90%, var(--gb-gold-deep) 0%, rgba(169,118,47,0) 60%),
       radial-gradient(130% 120% at 50% 42%, var(--gb-gold) 0%, var(--gb-gold-mid) 52%, var(--gb-gold-shadow) 100%);
   }
-  /* Hero grain — overlay, contrast-boosted desaturated fractalNoise. Opacity
-     dialled to .18 per design review (the mock's .65 read too heavy on gold). */
+  /* Hero grain — static tiling noise PNG, no mix-blend-mode (a blended overlay
+     forces the hero off the fast-composite path and janks on scroll). .14 reads
+     close to the old .18 overlay without the blend's graying. */
   .hero::after{
-    content:""; position:absolute; inset:0; pointer-events:none; opacity:.18; mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='1.8' intercept='-0.4'/><feFuncG type='linear' slope='1.8' intercept='-0.4'/><feFuncB type='linear' slope='1.8' intercept='-0.4'/><feFuncA type='linear' slope='0' intercept='1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.14;
+    background-image:url("/img/grain.png"); background-size:128px 128px; background-repeat:repeat;
   }
 
   .inner{
@@ -82,14 +83,23 @@ const faceRows = [
     align-items:center; justify-content:center; text-align:center; padding:96px 32px 44px;
   }
 
-  /* Face cluster — real consented photos, grayscale per the mock. */
+  /* Face cluster — photos are baked greyscale (no runtime filter). The magnifier
+     animates ONLY transform/opacity (+ the glow pseudo's opacity); never blur or
+     box-shadow per frame. border-radius clips the bg, so no overflow:hidden — the
+     glow pseudo must not be clipped. */
   .panels{position:relative; display:flex; flex-direction:column; align-items:center; gap:15px; margin:0 0 44px}
   .prow{display:flex; justify-content:center; gap:15px}
   .panel{
-    position:relative; width:58px; height:58px; border-radius:15px; overflow:hidden;
+    position:relative; width:58px; height:58px; border-radius:15px;
     background-color:#EFE2D2; background-size:cover; background-position:center 38%; background-repeat:no-repeat;
-    filter:grayscale(1); box-shadow:var(--gb-shadow-tile);
-    transition:transform .26s ease-out, filter .26s ease-out, opacity .26s ease-out, box-shadow .26s ease-out;
+    box-shadow:var(--gb-shadow-tile);
+    transition:transform .26s ease-out, opacity .26s ease-out;
+  }
+  /* Focus glow: static max shadow, faded by --sf (= f) — opacity only, no paint. */
+  .panel::after{
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    box-shadow:0 10px 26px rgba(40,26,12,.30); opacity:var(--sf, 0);
+    transition:opacity .26s ease-out;
   }
 
   .h1{
@@ -195,7 +205,6 @@ const faceRows = [
     const FI = 7;                                   // resting focus tile (data-i=7)
     const SCALE_MIN = 0.66, SCALE_SPAN = 0.60;      // scale = 0.66 → 1.26
     const OP_MIN = 0.18, OP_SPAN = 0.82;            // opacity = 0.18 → 1.0
-    const BLUR_MAX = 3;                             // px, at f = 0
 
     let centers: { x: number; y: number }[] = [];
     let SIG = 112, fx0 = 0, fy0 = 0;
@@ -220,18 +229,17 @@ const faceRows = [
         const dx = c.x - fx, dy = c.y - fy;
         const f = Math.exp(-(dx * dx + dy * dy) / denom);
         const t = tiles[i];
+        // transform + opacity only; the glow is the pseudo's opacity via --sf.
         t.style.transform = `scale(${(SCALE_MIN + SCALE_SPAN * f).toFixed(3)})`;
         t.style.opacity = (OP_MIN + OP_SPAN * f).toFixed(3);
-        t.style.filter = `grayscale(1) blur(${(BLUR_MAX * (1 - f)).toFixed(2)}px)`;
-        t.style.boxShadow = `0 ${(1 + 9 * f).toFixed(1)}px ${(4 + 22 * f).toFixed(1)}px rgba(40,26,12,${(0.30 * f).toFixed(3)})`;
+        t.style.setProperty('--sf', f.toFixed(3));
         t.style.zIndex = String(Math.round(20 * f));
       }
     };
 
-    // Promote tiles to their own layers ONLY while interacting, then release —
-    // a permanent will-change on 14 filtered tiles starves the whole compositor.
+    // Promote tiles to their own layers ONLY while interacting, then release.
     let release = 0;
-    const promote = (on: boolean) => { const v = on ? 'transform, filter' : 'auto'; for (const t of tiles) t.style.willChange = v; };
+    const promote = (on: boolean) => { const v = on ? 'transform' : 'auto'; for (const t of tiles) t.style.willChange = v; };
 
     const frame = () => { raf = 0; apply(px, py); };
     const onMove = (e: PointerEvent) => { px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(frame); };
