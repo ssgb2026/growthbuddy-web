@@ -1,15 +1,13 @@
 ---
 /*
-  Fold 2 — The Problem (copy/structure from "Fold 2 – The Problem.html";
-  motion from INTERACTIVE-BEHAVIOUR-SPEC §2 — scroll-ink statement).
+  Fold 2 — What we do / The Problem.
+  Copy + structure from "Fold 2 – The Problem.html"; motion from
+  INTERACTIVE-BEHAVIOUR-SPEC §2 (setupInk). No .dc.html present → spec authoritative.
 
-  Each word inks from dim (0.2) to full as it rises through the viewport mid-line
-  (start 0.85·vh → end 0.42·vh); data-clay words also lerp ink → clay. The fold's
-  punchline ("We built Growthbuddy to solve all of this.") is the clay line.
-
-  Progressive enhancement: words render readable (opacity 1) in CSS; the island
-  dims-then-inks them only when motion is allowed, so no-JS / reduced-motion show
-  the readable final state. Grain comes from the global <Grain/> layer.
+  Scroll-ink: each [data-word] starts opacity:0.2 and inks to 1 as it rises through
+  the viewport mid-line (start .85·vh → end .42·vh); [data-clay] words also lerp
+  ink → clay channel-by-channel. reduced-motion / no-JS → all words opacity 1.
+  Paper bg + the global .05 grain (no per-section grain).
 */
 const lines = [
   ['Good', 'people', 'are', 'harder', 'to', 'find', 'than', 'ever.'],
@@ -28,8 +26,8 @@ const builtFor = [
   { label: 'Finance teams', tint: 'sand' },
 ];
 ---
-<section class="problem" aria-label="The problem we solve">
-  <div class="problem-inner">
+<section class="whatwedo" aria-label="The problem we solve">
+  <div class="ww-inner">
     <div class="ink-stmt" data-ink>
       {lines.map((words) => (
         <p class="stmt">{words.map((w) => (<span class="word" data-word>{w + ' '}</span>))}</p>
@@ -46,18 +44,26 @@ const builtFor = [
   </div>
 </section>
 
+<noscript>
+  <style>.word{opacity:1 !important} .word[data-clay]{color:var(--gb-clay) !important}</style>
+</noscript>
+
 <style>
-  .problem{padding:clamp(84px, 10vw, 120px) 0}
-  .problem-inner{max-width:860px; margin:0 auto; padding:0 32px}
+  .whatwedo{padding:clamp(84px, 10vw, 120px) 0}
+  .ww-inner{max-width:860px; margin:0 auto; padding:0 32px}
 
   .stmt{
     margin:0 0 .5em; font-family:var(--gb-font-display); font-weight:400;
     font-size:var(--gb-fs-statement); line-height:1.46; letter-spacing:var(--gb-display-ls); text-align:left;
   }
   .clay-line{margin-bottom:0}
-  /* Readable by default; the island dims (.2) then inks each word on scroll. */
-  .word{color:var(--gb-ink)}
-  .word[data-clay]{color:var(--gb-clay)}
+  /* Resting state per spec §2: dim ink; the island inks each word on scroll. */
+  .word{color:var(--gb-ink); opacity:.2}
+
+  @media (prefers-reduced-motion:reduce){
+    .word{opacity:1}
+    .word[data-clay]{color:var(--gb-clay)}
+  }
 
   .built-for{margin-top:56px; display:flex; align-items:flex-start; gap:40px}
   .built-for-label{
@@ -80,7 +86,8 @@ const builtFor = [
   .tint-sand{background:var(--gb-tint-sand-bg); color:var(--gb-tint-sand-tx)}
 
   @media (max-width:768px){
-    .problem-inner{padding:0 20px}
+    .ww-inner{padding:0 20px}
+    .built-for{margin-top:44px}
   }
   @media (max-width:560px){
     .built-for{flex-direction:column; gap:14px}
@@ -90,19 +97,22 @@ const builtFor = [
 
 <script>
   /*
-    Scroll-ink statement (INTERACTIVE-BEHAVIOUR-SPEC §2). rAF-throttled.
-    p = clamp01((0.85·vh − wordCentreY) / (0.85·vh − 0.42·vh));
-    opacity = 0.2 + 0.8·p; data-clay words lerp ink(24,26,31) → clay(185,107,77).
-    Reduced motion: leave the CSS readable final state untouched.
+    Scroll-ink (INTERACTIVE-BEHAVIOUR-SPEC §2). rAF-throttled.
+    p = clamp01((0.85·vh − wordCentreY)/(0.85·vh − 0.42·vh)); opacity = 0.2 + 0.8·p.
+    data-clay words lerp ink → clay. INK/CLAY == --gb-ink / --gb-clay token values.
+    reduced-motion: leave the CSS final state (opacity 1, clay words clay).
   */
   const initInk = () => {
     const root = document.querySelector('[data-ink]');
     if (!root) return;
     const words = Array.from(root.querySelectorAll<HTMLElement>('[data-word]'));
     if (words.length === 0) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      words.forEach((w) => { w.style.opacity = '1'; if (w.hasAttribute('data-clay')) w.style.color = 'rgb(185,107,77)'; });
+      return;
+    }
 
-    const INK = [24, 26, 31], CLAY = [185, 107, 77];
+    const INK = [24, 26, 31], CLAY = [185, 107, 77]; // = --gb-ink / --gb-clay
     let ticking = false;
     const update = () => {
       ticking = false;
@@ -123,7 +133,7 @@ const builtFor = [
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll, { passive: true });
-    update(); // dim off-screen words on mount, set in-view words to their position
+    update(); // run once on mount
   };
 
   if (document.readyState !== 'loading') initInk();
