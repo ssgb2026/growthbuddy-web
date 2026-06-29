@@ -1,0 +1,100 @@
+---
+/*
+  Fold 5 — Roles we hire for (reproduces "Fold 5 - Roles we hire for.html" / spec §4).
+  Two opposed CSS marquees — NO JS island. Each row's list is doubled
+  ([...ROW, ...ROW]) so a translateX(0) ↔ translateX(-50%) linear-infinite loop is
+  seamless. Row 1 scrolls right (gb-ticker-right, 92s), Row 2 left
+  (gb-ticker-left, 100s). Hover pauses a row; edges fade via a mask-image.
+  reduced-motion freezes the marquee (global *{animation:none} + explicit rule).
+
+  Smoothness (CLAUDE.md budget): marquee animates ONLY transform (compositor);
+  will-change:transform is justified here because the track animates continuously.
+  Header/link reveal via the shared [data-reveal] hook. Paper bg + the global .05
+  PNG grain (no per-section fractalNoise / mix-blend-mode). content-visibility:auto
+  also stops the marquee compositing while the section is off-screen.
+
+  Role lists + casing are verbatim from the mock — not trimmed or re-ordered.
+*/
+const row1 = ['Performance Marketer', 'Operations Manager', 'Google Ads Expert', 'Financial Analyst', 'Social Media Manager', 'Brand Strategy', 'Account Manager', 'Conversion Optimization', 'Media Planner', 'Customer Success Manager', 'Growth Marketing Manager', 'Marketing Assistant', 'Shopify Expert', 'PR & Comms'];
+const row2 = ['Meta Ads Expert', 'Project Manager', 'Email Marketing', 'Finance & Operations Analyst', 'Programmatic Marketing Specialist', 'Digital Marketing Manager', 'Copywriting', "Founder's Associate", 'Marketing Analytics', 'Ad Operations Expert', 'SEO Expert', 'Community Management', 'Paid Ads'];
+---
+<section class="roles" aria-labelledby="roles-title">
+  <div class="roles-head">
+    <p class="roles-eyebrow" data-reveal data-delay="0">Our expertise</p>
+    <h2 class="roles-h2" id="roles-title" data-reveal data-delay="80">Roles we <em>hire</em> for</h2>
+  </div>
+
+  <div class="roles-tickers" aria-label="Roles we hire for" data-reveal data-delay="240">
+    <div class="roles-row">
+      <div class="roles-track roles-track--right">
+        {[0, 1].map((copy) => row1.map((r) => (
+          <Fragment>
+            <span class="role" aria-hidden={copy === 1 ? 'true' : undefined}>{r}</span>
+            <span class="dot" aria-hidden="true">•</span>
+          </Fragment>
+        )))}
+      </div>
+    </div>
+    <div class="roles-row">
+      <div class="roles-track roles-track--left">
+        {[0, 1].map((copy) => row2.map((r) => (
+          <Fragment>
+            <span class="role" aria-hidden={copy === 1 ? 'true' : undefined}>{r}</span>
+            <span class="dot" aria-hidden="true">•</span>
+          </Fragment>
+        )))}
+      </div>
+    </div>
+  </div>
+
+  <div class="roles-foot">
+    <a class="roles-link" href="/hire" data-reveal data-delay="320">See all roles →</a>
+  </div>
+</section>
+
+<style>
+  .roles{padding:var(--gb-section-y) 0; content-visibility:auto; contain-intrinsic-size:0 460px}
+  .roles-head, .roles-foot{max-width:1080px; margin:0 auto; padding:0 24px; text-align:center}
+
+  .roles-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .roles-h2{
+    margin:0; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .roles-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+
+  .roles-tickers{margin-top:56px; display:flex; flex-direction:column; gap:8px}
+  .roles-row{
+    overflow:hidden; white-space:nowrap;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+  .roles-track{display:inline-flex; align-items:center; will-change:transform}
+  .roles-track--right{animation:gb-ticker-right 92s linear infinite}
+  .roles-track--left{animation:gb-ticker-left 100s linear infinite}
+  .roles-row:hover .roles-track{animation-play-state:paused}
+
+  .role{font-family:var(--gb-font-body); font-weight:400; font-size:clamp(16px, 2vw, 23px); line-height:1.4; color:var(--gb-ink)}
+  .dot{display:inline-block; margin:0 22px; color:var(--gb-clay); font-size:clamp(9px, .9vw, 11px); transform:translateY(-2px)}
+
+  .roles-link{
+    display:inline-block; margin-top:32px; font-family:var(--gb-font-label); font-weight:500;
+    text-transform:uppercase; letter-spacing:.05em; font-size:14px; color:var(--gb-clay); text-decoration:none;
+    transition:color .15s ease;
+  }
+  .roles-link:hover{color:var(--gb-clay-dark); text-decoration:underline}
+
+  @keyframes gb-ticker-left{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+  @keyframes gb-ticker-right{from{transform:translateX(-50%)} to{transform:translateX(0)}}
+
+  @media (max-width:768px){
+    .roles-tickers{margin-top:40px}
+    .dot{margin:0 14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .roles-track{animation:none}
+  }
+</style>
