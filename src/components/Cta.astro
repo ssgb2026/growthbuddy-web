@@ -10,7 +10,16 @@ interface Props { variant?: 'gold' | 'clay'; label: string; href: string; }
 const { variant = 'gold', label, href } = Astro.props;
 ---
 <a class={`cta cta--${variant}`} href={href}>
-  <div class="button-outer"><div class="button-inner"><span>{label}</span></div></div>
+  <div class="button-outer"><div class="button-inner">
+    <span class="cta-content">
+      <span class="cta-label">{label}</span>
+      <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="8" y1="12" x2="14.5" y2="12"></line>
+        <polyline points="12 9.5 15 12 12 14.5"></polyline>
+      </svg>
+    </span>
+  </div></div>
 </a>
 
 <style>
@@ -46,13 +55,19 @@ const { variant = 'gold', label, href } = Astro.props;
     clip-path:inset(clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) round 999vw);
     box-shadow:0.1em 0.15em 0.05em 0 inset rgba(var(--sh),.7),-0.025em -0.03em 0.05em 0.025em inset rgba(var(--sh),.45),0.25em 0.25em 0.2em 0 inset rgba(var(--sh),.45),0 0 0.05em 0.5em inset rgba(var(--hi),.14),0 0 0 0 inset rgba(var(--hi),1),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.12em 0.2em 0.1em inset rgba(var(--sh),.22);
   }
-  .cta .button-inner span{
-    position:relative; z-index:4; font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600;
-    color:transparent; background-image:linear-gradient(135deg, var(--txt1), var(--txt2));
-    -webkit-background-clip:text; background-clip:text; transition:transform 250ms ease;
-    display:block; -webkit-user-select:none; user-select:none;
+  .cta-content{
+    position:relative; z-index:4; display:inline-flex; align-items:center; gap:11px;
+    transition:transform 250ms ease; -webkit-user-select:none; user-select:none;
   }
-  .cta:hover .button-inner span{transform:scale(0.975)}
+  .cta:hover .cta-content{transform:scale(0.975)}
+  .cta-label{
+    font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600; font-size:17px;
+    color:transparent; background-image:linear-gradient(135deg, var(--txt1), var(--txt2));
+    -webkit-background-clip:text; background-clip:text;
+  }
+  /* Arrow in a transparent-fill ring; ring + arrow share weight & colour, so the
+     pill's gradient shows through the circle. */
+  .cta-arrow{flex:none; width:22px; height:22px; color:var(--gb-cta-txt-1)}
   .cta:active .button-inner{transform:scale(0.975)}
   .cta:focus-visible{outline:var(--gb-focus); outline-offset:3px}
 </style>
