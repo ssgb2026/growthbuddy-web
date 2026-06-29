@@ -9,6 +9,7 @@ import HowItWorks from '../components/home/HowItWorks.astro';
 import Roles from '../components/home/Roles.astro';
 import Proof from '../components/home/Proof.astro';
 import BehindEveryMatch from '../components/home/BehindEveryMatch.astro';
+import Pricing from '../components/home/Pricing.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
@@ -37,10 +38,12 @@ import BehindEveryMatch from '../components/home/BehindEveryMatch.astro';
   {/* Fold 7 — Behind Every Match (fan-out cards + hover-lift). */}
   <BehindEveryMatch />
 
+  {/* Fold 8 — Pricing (billing widget + bento + clay CTA). */}
+  <Pricing />
+
   {/*
     Remaining homepage folds — built one at a time into src/components/home/:
-      8  Pricing             10 Final CTA & Footer
-      9  Team & FAQ
+      9  Team & FAQ          10 Final CTA & Footer
   */}
 </BaseLayout>
 

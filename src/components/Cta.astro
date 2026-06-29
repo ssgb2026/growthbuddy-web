@@ -1,0 +1,58 @@
+---
+/*
+  Primary CTA — the LOCKED neumorphic pill (design-system §B.3). Shared so the
+  gold (hero/scrolled-nav) and clay-on-paper (pricing, final CTA) variants stay a
+  single source of truth. Animates only transform/opacity/clip-path (no blend).
+
+  Props: variant 'gold' | 'clay'; label; href.
+*/
+interface Props { variant?: 'gold' | 'clay'; label: string; href: string; }
+const { variant = 'gold', label, href } = Astro.props;
+---
+<a class={`cta cta--${variant}`} href={href}>
+  <div class="button-outer"><div class="button-inner"><span>{label}</span></div></div>
+</a>
+
+<style>
+  .cta{
+    --sh:var(--gb-cta-shadow); --hi:var(--gb-cta-hi);
+    --txt1:var(--gb-cta-txt-1); --txt2:var(--gb-cta-txt-2);
+    position:relative; display:inline-block; cursor:pointer; text-decoration:none; border:0;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    font-size:17px; border-radius:999vw; background-color:rgba(var(--sh),.5);
+    box-shadow:-0.15em -0.15em 0.15em -0.075em rgba(var(--sh),.22), 0.0375em 0.0375em 0.0675em 0 rgba(var(--sh),.10);
+  }
+  .cta--gold{--g1:var(--gb-cta-gold-1); --g2:var(--gb-cta-gold-2)}
+  .cta--clay{--g1:var(--gb-cta-clay-1); --g2:var(--gb-cta-clay-2)}
+  .cta::after{
+    content:""; position:absolute; z-index:0; width:calc(100% + 0.3em); height:calc(100% + 0.3em);
+    top:-0.15em; left:-0.15em; border-radius:inherit;
+    background:linear-gradient(-135deg, rgba(var(--sh),.5), transparent 20%, transparent 100%);
+    filter:blur(0.0125em); opacity:.28; /* no mix-blend-mode — keeps hover repaints cheap */
+  }
+  .cta .button-outer{
+    position:relative; z-index:1; border-radius:inherit; transition:box-shadow 300ms ease;
+    box-shadow:0 0.05em 0.05em -0.01em rgba(var(--sh),1), 0 0.01em 0.01em -0.01em rgba(var(--sh),.5), 0.15em 0.3em 0.1em -0.01em rgba(var(--sh),.25);
+  }
+  .cta:hover .button-outer{box-shadow:0 0 0 0 rgba(var(--sh),1), 0 0 0 0 rgba(var(--sh),.5), 0 0 0 0 rgba(var(--sh),.25)}
+  .cta .button-inner{
+    position:relative; z-index:1; border-radius:inherit; padding:0.92em 1.5em;
+    background-image:linear-gradient(135deg, var(--g1), var(--g2));
+    transition:box-shadow 300ms ease, clip-path 250ms ease, transform 250ms ease;
+    overflow:clip; clip-path:inset(0 0 0 0 round 999vw);
+    box-shadow:0 0 0 0 inset rgba(var(--sh),.1),-0.05em -0.05em 0.05em 0 inset rgba(var(--sh),.22),0 0 0 0 inset rgba(var(--sh),.1),0 0 0.05em 0.2em inset rgba(var(--hi),.22),0.025em 0.05em 0.1em 0 inset rgba(var(--hi),.92),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.25em 0.25em 0.1em inset rgba(var(--sh),.22);
+  }
+  .cta:hover .button-inner{
+    clip-path:inset(clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) clamp(1px,0.0625em,2px) round 999vw);
+    box-shadow:0.1em 0.15em 0.05em 0 inset rgba(var(--sh),.7),-0.025em -0.03em 0.05em 0.025em inset rgba(var(--sh),.45),0.25em 0.25em 0.2em 0 inset rgba(var(--sh),.45),0 0 0.05em 0.5em inset rgba(var(--hi),.14),0 0 0 0 inset rgba(var(--hi),1),0.12em 0.12em 0.12em inset rgba(var(--hi),.22),-0.075em -0.12em 0.2em 0.1em inset rgba(var(--sh),.22);
+  }
+  .cta .button-inner span{
+    position:relative; z-index:4; font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600;
+    color:transparent; background-image:linear-gradient(135deg, var(--txt1), var(--txt2));
+    -webkit-background-clip:text; background-clip:text; transition:transform 250ms ease;
+    display:block; -webkit-user-select:none; user-select:none;
+  }
+  .cta:hover .button-inner span{transform:scale(0.975)}
+  .cta:active .button-inner{transform:scale(0.975)}
+  .cta:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+</style>

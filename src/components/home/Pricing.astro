@@ -1,0 +1,177 @@
+---
+/*
+  Fold 8 — Pricing (reproduces "Fold 8 – Pricing.html" / spec §9).
+  Staggered scroll-reveal via the shared [data-reveal] hook (the visibilitychange
+  guard + 600ms fallback in _reveal.ts mean the fade only plays while the tab is
+  visible but never gets stuck hidden). animate transform/opacity only.
+
+  Layout: a warm-greige billing panel (--gb-surface, --gb-radius-xl,
+  --gb-shadow-panel, no border) with the "pay only while it works" ledger on inner
+  --gb-surface-tile widgets (--gb-radius-md, no border); + a 6-card bento of
+  surface-tile cards with clay icon-chips. CTA = on-paper neumorphic variant
+  (--gb-cta-clay-*). Paper bg + global PNG grain; content-visibility:auto. Copy,
+  figures and labels verbatim from the mock.
+*/
+import Cta from '../Cta.astro';
+
+const months = ['Month 1', 'Month 2', 'Month 3', 'Month 4'];
+const bento = [
+  { icon: '<circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>', title: 'We do the hiring & vetting for you.', desc: 'We scan thousands, run technical interviews, then check for culture fit.' },
+  { icon: '<rect x="3" y="4.5" width="18" height="16.5" rx="2"></rect><line x1="3" y1="9.5" x2="21" y2="9.5"></line><line x1="8" y1="2.5" x2="8" y2="6"></line><line x1="16" y1="2.5" x2="16" y2="6"></line>', title: 'They work full-time, only for you.', desc: 'Five days a week, eight hours a day, just like a regular member of your team.' },
+  { icon: '<circle cx="12" cy="8" r="6"></circle><path d="M8.5 13.2 L7 22 L12 19 L17 22 L15.5 13.2"></path>', title: 'They have 3+ years of experience.', desc: "They already know the job, so you're not training them from scratch." },
+  { icon: '<polyline points="20 4 20 9 15 9"></polyline><path d="M20 9 A8 8 0 1 0 18 16"></path>', title: 'Wrong fit? We replace them for free.', desc: "If someone isn't a good fit, we find you a better one at no extra cost." },
+  { icon: '<path d="M12 2.5 L20 6 V12 C20 16.8 16.2 20.3 12 21.5 C7.8 20.3 4 16.8 4 12 V6 Z"></path><path d="M9 12 l2 2 l4 -4.5"></path>', title: 'Payroll and compliance managed.', desc: 'We sort the pay, benefits and paperwork, so it never lands on you.' },
+  { icon: '<path d="M21 11.5 A8.5 8 0 0 1 9.5 19 L4 20.5 L5.5 15.5 A8 8 0 1 1 21 11.5 Z"></path>', title: 'We stay involved after they join.', desc: "We check in, coach them and fix any problems, so you're never on your own." },
+];
+const logos = [
+  { name: 'Manual', file: '/img/partners/manual.png', h: 27 },
+  { name: 'Spekk', file: '/img/partners/spekk.png', h: 25 },
+  { name: 'Tread Partners', file: '/img/partners/tread-partners.png', h: 36 },
+  { name: 'YellowFin Digital', file: '/img/partners/yellowfin-digital.png', h: 29 },
+  { name: 'archa', file: '/img/partners/archa.png', h: 27 },
+  { name: '3Dctrl', file: '/img/partners/3dctrl.png', h: 23 },
+];
+---
+<section class="pr" aria-labelledby="pr-title">
+  <p class="pr-eyebrow" data-reveal data-delay="0">Simple pricing</p>
+  <h2 class="pr-h2" id="pr-title" data-reveal data-delay="80">You only pay while it <em>works</em></h2>
+  <p class="pr-sub" data-reveal data-delay="160">Pay a fixed monthly fee for each role, and only for the duration of their tenure.</p>
+
+  <div class="pr-layout">
+    <div class="pr-panel" data-reveal data-delay="220">
+      <div class="pr-fig">
+        <div class="pr-fig-label">Starting from</div>
+        <div class="pr-fig-n">$3,000</div>
+        <div class="pr-fig-unit">Per month (all-inclusive)</div>
+      </div>
+
+      <div class="ledger">
+        {months.map((m, i) => (
+          <div class="ledger-row" data-reveal data-delay={String(340 + i * 120)}>
+            <span class="ledger-m">{m}</span>
+            <span class="ledger-v">
+              <span class="ledger-amt">$3,000</span>
+              <span class="ledger-status"><span class="dot"></span>Active</span>
+            </span>
+          </div>
+        ))}
+        <div class="ledger-ongoing">
+          <span class="ledger-ong-label">Ongoing →</span>
+          <span class="ledger-ong-note">while they stay</span>
+        </div>
+        <p class="ledger-foot">If they ever leave, you stop paying.</p>
+      </div>
+    </div>
+
+    <div class="pr-bentocol">
+      <p class="pr-included" data-reveal data-delay="260">What's included?</p>
+      <div class="pr-bento">
+        {bento.map((b, i) => (
+          <div class="bcard" data-reveal data-delay={String(320 + i * 80)}>
+            <div class="bcard-chip">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><Fragment set:html={b.icon} /></svg>
+            </div>
+            <h3 class="bcard-title">{b.title}</h3>
+            <p class="bcard-desc">{b.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="pr-cta" data-reveal data-delay="820">
+    <Cta variant="clay" label="Start your search →" href="/book-a-call" />
+  </div>
+
+  <div class="pr-trusted" data-reveal data-delay="900">
+    <p class="pr-trusted-label">Trusted by</p>
+    <div class="logos">
+      {logos.map((l) => (
+        <a class="logo" href="#" aria-label={l.name}><img src={l.file} alt={l.name} width="130" height={l.h} style={`height:${l.h}px`} loading="lazy" /></a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pr{
+    max-width:1180px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 1100px;
+  }
+  .pr-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .pr-h2{
+    margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .pr-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .pr-sub{
+    margin:0 auto clamp(40px,5vw,56px); max-width:42ch; font-family:var(--gb-font-body); font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted); text-wrap:pretty;
+  }
+
+  .pr-layout{display:flex; gap:24px; align-items:stretch; text-align:left}
+
+  /* Greige billing panel */
+  .pr-panel{
+    flex:0 0 380px; display:flex; flex-direction:column; justify-content:center;
+    background:var(--gb-surface); border-radius:var(--gb-radius-xl); padding:36px 32px; box-shadow:var(--gb-shadow-panel);
+  }
+  .pr-fig{padding:0 20px; text-align:center}
+  .pr-fig-label{margin-bottom:10px; font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:.06em; font-size:12px; color:var(--gb-muted)}
+  .pr-fig-n{font-family:var(--gb-font-display); font-weight:400; font-size:48px; line-height:1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink)}
+  .pr-fig-unit{margin-top:12px; font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:.06em; font-size:12px; color:var(--gb-clay)}
+
+  /* Inner ledger tile */
+  .ledger{margin-top:30px; background:var(--gb-surface-tile); border-radius:var(--gb-radius-md); padding:18px 22px; box-shadow:var(--gb-shadow-tile)}
+  .ledger-row{display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:var(--gb-border-hairline)}
+  .ledger-m{font-family:var(--gb-font-label); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gb-muted); white-space:nowrap}
+  .ledger-v{display:flex; align-items:center; gap:10px}
+  .ledger-amt{font-family:var(--gb-font-body); font-size:14px; color:var(--gb-ink)}
+  .ledger-status{display:inline-flex; align-items:center; gap:6px; font-family:var(--gb-font-label); text-transform:uppercase; letter-spacing:.04em; font-size:9px; color:var(--gb-clay)}
+  .ledger-status .dot{width:6px; height:6px; border-radius:50%; background:var(--gb-clay)}
+  .ledger-ongoing{display:flex; align-items:center; justify-content:space-between; padding-top:11px}
+  .ledger-ong-label{font-family:var(--gb-font-label); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gb-clay)}
+  .ledger-ong-note{font-family:var(--gb-font-body); font-size:13px; color:var(--gb-muted)}
+  .ledger-foot{margin:16px 0 0; font-family:var(--gb-font-body); font-size:12px; line-height:1.5; color:var(--gb-ink); font-style:italic; text-align:center}
+
+  /* Bento */
+  .pr-bentocol{flex:1; display:flex; flex-direction:column; gap:16px}
+  .pr-included{margin:0 0 2px; font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:.06em; font-size:14px; color:var(--gb-clay)}
+  .pr-bento{flex:1; display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:1fr; gap:16px}
+  .bcard{display:flex; flex-direction:column; gap:12px; background:var(--gb-surface-tile); border-radius:var(--gb-radius-md); padding:22px; box-shadow:var(--gb-shadow-tile)}
+  .bcard-chip{width:38px; height:38px; border-radius:var(--gb-radius-xs); background:rgba(185,107,77,.10); display:flex; align-items:center; justify-content:center}
+  .bcard-chip svg{stroke:var(--gb-clay)}
+  .bcard-title{margin:0; font-family:var(--gb-font-body); font-weight:600; font-size:15px; letter-spacing:-0.2px; color:var(--gb-ink)}
+  .bcard-desc{margin:0; font-family:var(--gb-font-body); font-weight:400; font-size:13px; line-height:1.5; color:var(--gb-muted); text-wrap:pretty}
+
+  .pr-cta{margin-top:clamp(48px,6vw,72px)}
+
+  /* Trusted-by */
+  .pr-trusted{margin-top:clamp(44px,5.5vw,64px)}
+  .pr-trusted-label{margin:0 0 24px; font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:14px; color:var(--gb-clay)}
+  .logos{max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:72px; flex-wrap:wrap}
+  .logo{display:inline-flex; opacity:.45; transition:opacity .3s ease, transform .3s ease}
+  .logo:hover, .logo:focus-visible{opacity:1; transform:scale(1.04)}
+  .logo:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+  .logo img{width:auto; display:block; max-width:120px}
+
+  @media (max-width:980px){
+    .pr-layout{flex-direction:column}
+    .pr-panel{flex:1 1 auto}
+    .pr-bento{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:768px){
+    .pr{padding:72px 20px}
+    .pr-h2{font-size:32px}
+    .pr-sub{margin-bottom:40px}
+    .pr-panel{padding:28px 20px}
+    .pr-fig{padding:0 14px}
+    .pr-fig-n{font-size:34px}
+    .pr-bento{grid-template-columns:1fr}
+    .logos{gap:30px 40px}
+    .logo img{max-width:104px}
+  }
+</style>
