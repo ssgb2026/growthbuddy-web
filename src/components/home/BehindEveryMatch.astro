@@ -68,7 +68,9 @@ const cards = [
 
   .fan{display:flex; justify-content:center; align-items:flex-start; min-height:340px; padding-top:30px; margin-top:clamp(40px,5vw,56px)}
   .card{
-    position:relative; width:148px; height:212px; border-radius:18px; padding:20px; margin:0 -30px; flex:none;
+    /* Mock's inline size was 148x212, but at that width titles + descriptions
+       wrap to 3 lines. Sized up to 180x256 so both fit 2 lines (measured). */
+    position:relative; width:180px; height:256px; border-radius:18px; padding:20px; margin:0 -30px; flex:none;
     transform-origin:bottom center; text-align:left; display:flex; flex-direction:column;
     box-shadow:var(--gb-shadow-fan);
     transition:transform .45s var(--gb-ease), opacity .45s var(--gb-ease), box-shadow .45s var(--gb-ease);
