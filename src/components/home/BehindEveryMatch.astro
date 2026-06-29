@@ -49,15 +49,15 @@ const cards = [
 
 <style>
   .bem{
-    max-width:1100px; margin:0 auto; padding:clamp(72px,10vw,120px) 24px; text-align:center;
+    max-width:1100px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
     content-visibility:auto; contain-intrinsic-size:0 620px;
   }
   .bem-eyebrow{
-    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
     text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
   }
   .bem-h2{
-    margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
     line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
   }
   .bem-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
@@ -66,7 +66,7 @@ const cards = [
     line-height:1.5; color:var(--gb-muted); max-width:48ch; text-wrap:pretty;
   }
 
-  .fan{display:flex; justify-content:center; align-items:flex-start; min-height:340px; padding-top:30px; margin-top:clamp(40px,5vw,56px)}
+  .fan{display:flex; justify-content:center; align-items:flex-start; min-height:340px; padding-top:30px; margin-top:var(--gb-space-10)}
   .card{
     /* Mock's inline size was 148x212, but at that width titles + descriptions
        wrap to 3 lines. Sized up to 180x256 so both fit 2 lines (measured). */
@@ -82,6 +82,9 @@ const cards = [
   .card-divider{height:1px; background:rgba(0,0,0,.10); margin:12px 0}
   .card-desc{font-size:13px; line-height:1.4; color:#4A4D52}
 
+  @media (max-width:768px){
+    .bem{padding:72px 20px}
+  }
   @media (max-width:820px){
     .fan{flex-direction:column; align-items:center; gap:16px; padding-top:0; min-height:0}
     .card{transform:none !important; opacity:1 !important; margin:0 !important; width:100% !important; max-width:340px !important; height:auto !important}

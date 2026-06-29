@@ -1,0 +1,82 @@
+---
+/*
+  Fold — FAQ. Split out from the former Team & FAQ fold so the team and the FAQ are
+  two independent paper folds with the shared section rhythm. Native
+  <details>/<summary> with the first open by default; the "+" rotates to "×" via
+  pure CSS (details[open] [data-ic]) — no JS. Staggered scroll-reveal via the
+  shared [data-reveal] island. Paper bg + global PNG grain; content-visibility:auto.
+  Copy verbatim from the mock.
+*/
+const faqs = [
+  { q: 'Where do the team members work?', a: 'They work remotely, aligned to your business hours, so they’re online and reachable exactly when your team is. In practice, it’s identical to having someone in-house – they join your meetings, use your tools, and live in your Slack channels day to day.' },
+  { q: 'Who employs them?', a: 'We do – every team member is officially employed by Growthbuddy and sits on our payroll. That means we take care of the contracts, taxes, and cross-border compliance behind the scenes, so you get a dedicated person without any of the legal or admin overhead landing on your desk.' },
+  { q: 'How much does it cost?', a: 'It’s a simple flat monthly fee for each team member, with nothing to pay up front. You’re only charged for as long as they stay with you, which keeps your costs predictable and means the fee stops the moment they do.', link: { href: '#pricing', label: 'See pricing →' } },
+  { q: 'What if it doesn’t work out?', a: 'If a match isn’t working out, we’ll step in and find you a replacement at no extra cost. And because you only ever pay while someone is actively on your team, you’re never left locked into a hire that isn’t pulling its weight.' },
+  { q: 'How long until I meet candidates?', a: 'Usually, within a few weeks of our first call. We’d much rather take a little longer to test people properly than rush an unvetted name in front of you – but you certainly won’t be left waiting around for months.' },
+  { q: 'What kinds of roles do you fill?', a: 'We focus on marketing, operations, customer success, strategy, and finance roles. Whatever the function, every person we place brings at least three years of real, hands-on experience – we don’t deal in juniors or jacks-of-all-trades.' },
+];
+---
+<section class="tf" aria-label="FAQ">
+  <p class="tf-eyebrow" data-reveal data-delay="0">FAQ</p>
+  <h2 class="tf-h2" data-reveal data-delay="80">Commonly asked <em>questions</em></h2>
+  <p class="tf-intro" data-reveal data-delay="160">The things teams usually ask before they get started.</p>
+
+  <div class="faq">
+    {faqs.map((f, i) => (
+      <details data-reveal data-delay={String(240 + i * 80)} open={i === 0}>
+        <summary>
+          <span class="faq-q">{f.q}</span>
+          <span class="faq-ic" data-ic aria-hidden="true"><span class="faq-bar faq-bar--h"></span><span class="faq-bar faq-bar--v"></span></span>
+        </summary>
+        <div class="faq-a">{f.a}{f.link && (<Fragment> <a class="faq-link" href={f.link.href}>{f.link.label}</a></Fragment>)}</div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .tf{
+    max-width:920px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 860px;
+  }
+  .tf-eyebrow{
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .tf-h2{
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .tf-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .tf-intro{
+    margin:0 auto var(--gb-space-10); max-width:54ch; font-family:var(--gb-font-body); font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted); text-wrap:pretty;
+  }
+
+  .faq{max-width:760px; margin:0 auto; text-align:left}
+  .faq details{border-bottom:var(--gb-border-hairline)}
+  .faq summary{
+    display:flex; justify-content:space-between; align-items:center; gap:20px; cursor:pointer; padding:22px 0;
+    font-family:var(--gb-font-body); font-weight:600; font-size:17px; color:var(--gb-ink); list-style:none;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+  .faq-q{min-width:0}
+  .faq-ic{flex:none; width:22px; height:22px; position:relative; transition:transform .3s var(--gb-ease)}
+  .faq details[open] .faq-ic{transform:rotate(135deg)}
+  .faq-bar{position:absolute; background:var(--gb-clay); border-radius:2px}
+  .faq-bar--h{top:10px; left:3px; width:16px; height:2px}
+  .faq-bar--v{top:3px; left:10px; width:2px; height:16px}
+  .faq-a{padding:0 0 22px; margin-top:-4px; max-width:64ch; font-size:16px; line-height:1.6; color:var(--gb-muted)}
+  .faq-link{color:var(--gb-clay); text-decoration:none; transition:color .15s ease}
+  .faq-link:hover{color:var(--gb-clay-dark); text-decoration:underline}
+
+  @media (max-width:768px){
+    .tf{padding:72px 20px}
+    .tf-h2{font-size:32px}
+    .tf-intro{margin-bottom:40px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .faq-ic{transition:none !important}
+  }
+</style>

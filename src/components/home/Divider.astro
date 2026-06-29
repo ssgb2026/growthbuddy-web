@@ -1,0 +1,63 @@
+---
+/*
+  Centre-out animated divider between paper folds.
+  A 1px greige hairline (--gb-surface) that draws outward FROM THE CENTRE
+  (transform: scaleX 0→1, transform-origin centre — never width) the first time it
+  scrolls into view; the two square end caps fade in just AFTER the line reaches
+  full width. No vertical margin: it sits centred in the existing inter-fold
+  whitespace and does not alter the locked section rhythm. Honours
+  prefers-reduced-motion (shows the full line + caps instantly, no draw). The reveal
+  island (IntersectionObserver, threshold 0.4, then unobserve) is hoisted once and
+  drives every <Divider> on the page.
+*/
+---
+<div class="gb-divider" data-divider aria-hidden="true">
+  <span class="gb-divider-cap"></span>
+  <span class="gb-divider-line"></span>
+  <span class="gb-divider-cap"></span>
+</div>
+
+<style>
+  .gb-divider{
+    max-width:var(--gb-container); margin:0 auto; padding:0 var(--gb-gutter);
+    display:flex; align-items:center; /* no vertical margin — keeps fold rhythm intact */
+  }
+  .gb-divider-line{
+    flex:1 1 auto; height:1px; background:var(--gb-surface);
+    transform:scaleX(0); transform-origin:center;
+    transition:transform .6s var(--gb-ease);
+  }
+  .gb-divider-cap{
+    flex:none; width:5px; height:5px; background:var(--gb-hairline);
+    opacity:0; transition:opacity .25s ease;
+  }
+  /* draw the line first, then fade the caps in once it has reached the ends */
+  .gb-divider[data-revealed] .gb-divider-line{transform:scaleX(1)}
+  .gb-divider[data-revealed] .gb-divider-cap{opacity:1; transition-delay:.55s}
+
+  @media (prefers-reduced-motion:reduce){
+    .gb-divider-line{transform:none; transition:none}
+    .gb-divider-cap{opacity:1; transition:none}
+  }
+</style>
+
+<script>
+  // Reveal island (hoisted once): draw each divider centre-out on first view, once.
+  const dividers = document.querySelectorAll<HTMLElement>('[data-divider]');
+  if (dividers.length) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) {
+      dividers.forEach((d) => d.setAttribute('data-revealed', ''));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.setAttribute('data-revealed', '');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      dividers.forEach((d) => io.observe(d));
+    }
+  }
+</script>

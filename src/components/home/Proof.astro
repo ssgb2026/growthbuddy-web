@@ -81,15 +81,15 @@ const panels = [
 
 <style>
   .proof-stats{
-    max-width:1000px; margin:0 auto; padding:clamp(72px,10vw,120px) 24px clamp(48px,6vw,64px); text-align:center;
+    max-width:1000px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter) clamp(48px,6vw,64px); text-align:center;
     content-visibility:auto; contain-intrinsic-size:0 420px;
   }
   .proof-eyebrow{
-    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
     text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
   }
   .proof-h2{
-    margin:0 auto clamp(40px,5vw,56px); max-width:18ch; font-family:var(--gb-font-display); font-weight:700;
+    margin:0 auto var(--gb-space-10); max-width:18ch; font-family:var(--gb-font-display); font-weight:700;
     font-size:var(--gb-fs-title); line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
   }
   .proof-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
@@ -99,7 +99,7 @@ const panels = [
   .stat-l{margin-top:12px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow); text-transform:uppercase; letter-spacing:.05em; font-size:14px; color:var(--gb-clay)}
 
   .proof-quotes{
-    max-width:1760px; margin:0 auto; padding:0 clamp(20px,4vw,56px) clamp(80px,10vw,128px);
+    max-width:1760px; margin:0 auto; padding:0 clamp(20px,4vw,56px) var(--gb-section-y);
     content-visibility:auto; contain-intrinsic-size:0 420px;
   }
   .accordion{display:flex; gap:16px; height:330px; align-items:stretch; text-align:left}

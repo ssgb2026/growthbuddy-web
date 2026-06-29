@@ -1,0 +1,73 @@
+---
+/*
+  Fold — "The people behind it" (the team). Split out from the former Team & FAQ
+  fold so the team and the FAQ are two independent paper folds with the shared
+  section rhythm. Initials avatars (§B.14) — no AI faces; name --gb-weight-strong,
+  role line Space Grotesk uppercase --gb-clay. Staggered scroll-reveal via the
+  shared [data-reveal] island. Paper bg + global PNG grain; content-visibility:auto.
+  Copy verbatim from the mock.
+*/
+const team = [
+  { initial: 'A', name: 'Avani', role: 'Co-founder' },
+  { initial: 'S', name: 'Srikant', role: 'Co-founder' },
+  { initial: 'S', name: 'Srujana', role: 'Sales Strategy' },
+  { initial: 'H', name: 'Harshita', role: 'Sales & Marketing Analyst' },
+  { initial: 'A', name: 'Aditi', role: "Founder’s Associate" },
+  { initial: 'C', name: 'Clessia', role: 'HR Coordinator' },
+];
+---
+<section class="tf" aria-label="The people behind it">
+  <p class="tf-eyebrow" data-reveal data-delay="0">The people behind it</p>
+  <h2 class="tf-h2" data-reveal data-delay="80">You’ll be working with <em>us</em></h2>
+  <p class="tf-intro" data-reveal data-delay="160">Growthbuddy is a small, founder-led team, by design. When you call, you reach Avani or Srikant – the people who personally vouch for every match.</p>
+
+  <div class="team">
+    {team.map((m, i) => (
+      <div class="member" data-reveal data-delay={String(240 + i * 80)}>
+        <div class="avatar" role="img" aria-label={`${m.name}, ${m.role}`}>{m.initial}</div>
+        <div class="member-name">{m.name}</div>
+        <div class="member-role">{m.role}</div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .tf{
+    max-width:920px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 1000px;
+  }
+  .tf-eyebrow{
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .tf-h2{
+    margin:0 0 var(--gb-space-4); font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .tf-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .tf-intro{
+    margin:0 auto var(--gb-space-10); max-width:54ch; font-family:var(--gb-font-body); font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted); text-wrap:pretty;
+  }
+
+  .team{display:grid; grid-template-columns:repeat(3,1fr); gap:24px 22px; max-width:760px; margin:0 auto}
+  .member{text-align:center}
+  .avatar{
+    width:100%; aspect-ratio:1/1; border-radius:var(--gb-radius-md);
+    background:linear-gradient(150deg, #EFE2D2, #EADBCE);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--gb-font-display); font-size:40px; color:var(--gb-clay-dark);
+    box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 10px 22px rgba(0,0,0,0.05);
+  }
+  .member-name{margin-top:14px; font-family:var(--gb-font-body); font-weight:var(--gb-weight-strong); font-size:17px; color:var(--gb-ink)}
+  .member-role{margin-top:6px; font-family:var(--gb-font-label); text-transform:uppercase; letter-spacing:.05em; font-size:11px; color:var(--gb-clay)}
+
+  @media (max-width:768px){
+    .tf{padding:72px 20px}
+    .tf-h2{font-size:32px}
+    .tf-intro{margin-bottom:40px}
+    .team{grid-template-columns:repeat(2,1fr); gap:18px}
+    .avatar{font-size:34px}
+  }
+</style>

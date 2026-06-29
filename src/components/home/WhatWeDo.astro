@@ -52,7 +52,7 @@ const builtFor = [
   /* Below the fold: skip off-screen rendering. contain-intrinsic-size reserves
      the height so scroll position stays stable; the island recaches word tops on
      contentvisibilityautostatechange when this section renders. */
-  .whatwedo{padding:clamp(84px, 10vw, 120px) 0; content-visibility:auto; contain-intrinsic-size:0 600px}
+  .whatwedo{padding:var(--gb-section-y) 0; content-visibility:auto; contain-intrinsic-size:0 600px}
   .ww-inner{max-width:860px; margin:0 auto; padding:0 32px}
 
   .stmt{
@@ -68,7 +68,7 @@ const builtFor = [
     .word[data-clay]{color:var(--gb-clay)}
   }
 
-  .built-for{margin-top:56px; display:flex; align-items:flex-start; gap:40px}
+  .built-for{margin-top:var(--gb-space-10); display:flex; align-items:flex-start; gap:40px}
   .built-for-label{
     flex:none; margin:0; padding-top:9px; font-family:var(--gb-font-label);
     font-weight:var(--gb-weight-eyebrow); text-transform:uppercase; letter-spacing:.14em;
