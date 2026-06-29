@@ -24,7 +24,7 @@ const faceRows = [
   ['11', '12', '13', '14'],
 ].map((row) => row.map((n) => ({ n, i: _i++ }))); // i = data-i (0..13); focus tile is i=7
 ---
-<section class="hero" data-screen-label="Hero">
+<section class="hero" data-screen-label="Hero" aria-label="Hire sharper talent without hiring locally">
   <div class="inner">
     <div class="panels" role="img" aria-label="People Growthbuddy has hired and coached" data-reveal data-delay="80">
       {faceRows.map((row) => (
