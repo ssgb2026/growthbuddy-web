@@ -1,0 +1,118 @@
+---
+/*
+  Fold 3 — How We Compare (reproduces "Fold 3 – How We Compare.html").
+  Motion: spec §9 — the whole table does a single-element scroll-reveal (no
+  stagger) via the shared [data-reveal] hook + _reveal.ts. No component JS.
+
+  Smoothness rules applied (CLAUDE.md budget): paper bg + the global .05 PNG grain
+  (no per-section runtime fractalNoise, no mix-blend-mode); reveal animates only
+  opacity/transform; below-fold section gets content-visibility:auto.
+
+  Token reconciliations: positive ticks are CLAY (--gb-clay), recruiter ✕ is muted
+  grey (#AEA89E, design-system B.12), recruiter text --gb-muted (not the mock's
+  #6c6862), dividers --gb-hairline, GB-column inner hairline rgba(33,78,63,.12).
+  --gb-forest-deep (#214E3F) appears ONLY as the mobile "Growthbuddy" ::before.
+*/
+const rows = [
+  { dim: 'When you pay', gb: 'A monthly fee, only while they stay.', rec: 'A large fee up front, win or lose.' },
+  { dim: "If it doesn't work out", gb: 'We replace them, and you stop paying.', rec: "Often your problem — the fee's already spent." },
+  { dim: 'What you get', gb: 'One to three hand-picked, vetted people.', rec: 'A stack of CVs to sift through yourself.' },
+  { dim: "How they're vetted", gb: 'Real role-specific tests — skills, communication, character.', rec: 'A quick screen against the CV.' },
+  { dim: 'After the hire', gb: 'Payroll, monthly check-ins, and coaching.', rec: 'They move on to the next placement.' },
+  { dim: 'Employment & compliance', gb: 'We employ them — contracts, taxes, payroll handled.', rec: 'Left for you to figure out.' },
+  { dim: 'Who you deal with', gb: 'The founders, every time.', rec: 'A rotating account team.' },
+];
+---
+<section class="cmp" aria-labelledby="cmp-title">
+  <p class="cmp-eyebrow">How we compare</p>
+  <h2 class="cmp-h2" id="cmp-title">Not your typical <em>recruiter</em></h2>
+  <p class="cmp-intro">Same goals, but a very different way of getting there.</p>
+
+  <div class="cmp-table" data-reveal>
+    <div class="hd"></div>
+    <div class="hd hd-gb">Growthbuddy</div>
+    <div class="hd hd-rec">Typical recruiter</div>
+
+    {rows.map((r) => (
+      <Fragment>
+        <div class="dim">{r.dim}</div>
+        <div class="cell cell-gb">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>
+          {r.gb}
+        </div>
+        <div class="cell cell-rec">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9 9l6 6M15 9l-6 6"></path></svg>
+          {r.rec}
+        </div>
+      </Fragment>
+    ))}
+  </div>
+</section>
+
+<style>
+  .cmp{
+    max-width:1000px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 900px;
+  }
+  .cmp-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .cmp-h2{
+    margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink); text-wrap:balance;
+  }
+  .cmp-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .cmp-intro{
+    margin:0 auto 56px; font-family:var(--gb-font-body); font-weight:400; font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted); max-width:48ch; text-wrap:pretty;
+  }
+
+  .cmp-table{display:grid; grid-template-columns:1.25fr 1fr 1fr; max-width:940px; margin:0 auto; text-align:left}
+
+  .hd{font-family:var(--gb-font-body); font-weight:600; font-size:17px; padding:18px 22px; border-bottom:var(--gb-border-hairline)}
+  .hd-gb{color:var(--gb-ink); background:var(--gb-surface); border-radius:16px 16px 0 0; text-align:center}
+  .hd-rec{color:var(--gb-muted); text-align:center}
+
+  .dim{
+    display:flex; align-items:center; align-self:stretch;
+    font-family:var(--gb-font-label); text-transform:uppercase; letter-spacing:.05em; font-size:14px; color:var(--gb-muted);
+    padding:18px 16px 18px 4px; border-bottom:var(--gb-border-hairline);
+  }
+  .cell{
+    display:flex; gap:12px; align-items:flex-start;
+    font-family:var(--gb-font-body); font-size:15px; line-height:1.4; padding:18px 22px;
+  }
+  .cell-gb{color:var(--gb-ink); background:var(--gb-surface); border-bottom:1px solid rgba(33,78,63,.12)}
+  .cell-rec{color:var(--gb-muted); border-bottom:var(--gb-border-hairline)}
+  .ic{flex:none; width:20px; height:20px; margin-top:1px}
+  .cell-gb .ic{stroke:var(--gb-clay)}
+  .cell-rec .ic{stroke:#AEA89E}
+
+  /* last row: drop dividers; round off the GB column */
+  .dim:last-of-type, .cell-rec:last-of-type{border-bottom:none}
+  .cell-gb:last-of-type{border-bottom:none; border-radius:0 0 16px 16px}
+
+  /* Mobile reflow (≤768px) — single column, stacked cards (verbatim from mock). */
+  @media (max-width:768px){
+    .cmp{padding:72px 20px}
+    .cmp-h2{font-size:32px}
+    .cmp-intro{margin-bottom:40px}
+    .cmp-table{grid-template-columns:1fr}
+    .hd{display:none}
+    .dim{margin-top:24px; border:none; padding:0 0 10px; align-self:start}
+    .cell{border:none}
+    .cell-gb, .cell-rec{position:relative; padding:14px 16px; border-radius:12px}
+    .cell-gb:last-of-type{border-radius:12px}
+    .cell-rec{background:transparent}
+    .cell-gb::before{
+      content:"Growthbuddy"; display:block; font-family:var(--gb-font-label); text-transform:uppercase;
+      letter-spacing:.05em; font-size:10px; color:var(--gb-forest-deep); margin-bottom:6px;
+    }
+    .cell-rec::before{
+      content:"Typical recruiter"; display:block; font-family:var(--gb-font-label); text-transform:uppercase;
+      letter-spacing:.05em; font-size:10px; color:var(--gb-muted); margin-bottom:6px;
+    }
+    .ic{margin-top:0}
+  }
+</style>
