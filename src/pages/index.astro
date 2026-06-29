@@ -5,6 +5,7 @@ import Hero from '../components/home/Hero.astro';
 import TrustedBy from '../components/home/TrustedBy.astro';
 import WhatWeDo from '../components/home/WhatWeDo.astro';
 import Compare from '../components/home/Compare.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
@@ -21,11 +22,14 @@ import Compare from '../components/home/Compare.astro';
   {/* Fold 3 — How We Compare (comparison table). */}
   <Compare />
 
+  {/* Fold 4 — How It Works (process steps + growing assessment bars). */}
+  <HowItWorks />
+
   {/*
     Remaining homepage folds — built one at a time into src/components/home/:
-      4  How It Works       8  Pricing
-      5  Roles we hire for  9  Team & FAQ
-      6  The Results        10 Final CTA & Footer
+      5  Roles we hire for  8  Pricing
+      6  The Results        9  Team & FAQ
+      7  Behind Every Match 10 Final CTA & Footer
   */}
 </BaseLayout>
 

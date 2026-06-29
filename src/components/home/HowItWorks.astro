@@ -1,0 +1,236 @@
+---
+/*
+  Fold 4 — How It Works (reproduces "Fold 4 – How It Works.html" / spec §8).
+  Four step cards in one row (2-up ≤1023px, stacked ≤768px). Each: number, title,
+  description, and a mini-UI vignette (no inner panel — only the small chips/tiles
+  are light --gb-surface-tile, on the greige --gb-surface card).
+
+  Motion: the staggered step reveal uses the shared [data-reveal] hook (its 600ms
+  fallback + visibilitychange guard are part of the smoothness work). The step-02
+  assessment "fill bars" GROW on reveal (spec §8) — implemented with
+  transform:scaleX() (compositor-only) rather than animating width, per the
+  CLAUDE.md budget. Each bar keeps its target in --w (its resting width); the bar
+  scales 0→1 once the step is revealed. reduced-motion / no-JS show final state.
+
+  Accents are CLAY throughout — no green. Paper bg + the global .05 PNG grain
+  (no per-section fractalNoise / mix-blend-mode). content-visibility:auto below fold.
+*/
+const steps = [
+  { n: '01', title: 'Tell us the role', desc: 'A short call to learn the role, your team, and what "great" means.' },
+  { n: '02', title: 'We find and test', desc: 'We search, screen, and run real assessments before you see a name.' },
+  { n: '03', title: 'You meet the shortlist', desc: "You interview one to three people we'd vouch for, then you choose." },
+  { n: '04', title: 'We stay and support', desc: 'Payroll, monthly check-ins, and coaching, for as long as they stay.' },
+];
+const shortlist = [
+  { in: 'S·R', role: 'PPC Specialist' },
+  { in: 'M·D', role: 'SEO Lead' },
+  { in: 'A·N', role: 'Content Lead' },
+];
+const support = ['Payroll & compliance', 'Monthly check-ins', 'Coaching & support'];
+---
+<section class="hiw" aria-labelledby="hiw-title">
+  <p class="hiw-eyebrow">The process</p>
+  <h2 class="hiw-h2" id="how-it-works"><span id="hiw-title">How it <em>works</em></span></h2>
+  <p class="hiw-intro">From the first call to long after the hire – here's exactly what to expect.</p>
+
+  <div class="hiw-grid">
+    {steps.map((s, i) => (
+      <article class="step" data-reveal data-delay={String(i * 80)}>
+        <div class="step-num">{s.n}</div>
+        <h3 class="step-title">{s.title}</h3>
+        <p class="step-desc">{s.desc}</p>
+        <div class="step-viz">
+          {s.n === '01' && (
+            <Fragment>
+              <p class="viz-label">Discovery call</p>
+              <div class="cal-row">
+                <div class="cal-day"><span class="cal-dow">Tue</span><span class="cal-date">5</span></div>
+                <div class="cal-day"><span class="cal-dow">Wed</span><span class="cal-date">6</span></div>
+                <div class="cal-day cal-day--on"><span class="cal-dow">Thu</span><span class="cal-date">7</span></div>
+                <div class="cal-day"><span class="cal-dow">Fri</span><span class="cal-date">8</span></div>
+                <div class="cal-day"><span class="cal-dow">Sat</span><span class="cal-date">9</span></div>
+              </div>
+              <div class="time-row">
+                <div class="time">8:50</div>
+                <div class="time time--on">9:00</div>
+                <div class="time">9:10</div>
+                <div class="time">9:20</div>
+                <div class="time">9:30</div>
+              </div>
+            </Fragment>
+          )}
+          {s.n === '02' && (
+            <Fragment>
+              <p class="viz-label">Assessment</p>
+              <div class="cand">
+                <span class="av av--lg">A·K</span>
+                <span><span class="cand-name">Candidate</span><span class="cand-role">Content Lead · 6 yrs</span></span>
+              </div>
+              <div class="bars">
+                {[{ l: 'Skills', w: '94%' }, { l: 'Communication', w: '88%' }, { l: 'Character', w: '96%' }].map((b) => (
+                  <div class="bar">
+                    <span class="bar-label">{b.l}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`--w:${b.w}`}></span></span>
+                    <svg class="check check--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"></path></svg>
+                  </div>
+                ))}
+              </div>
+            </Fragment>
+          )}
+          {s.n === '03' && (
+            <Fragment>
+              <p class="viz-label">Your shortlist</p>
+              <div class="shortlist">
+                {shortlist.map((p) => (
+                  <div class="sl-row">
+                    <span class="av">{p.in}</span>
+                    <span class="sl-role">{p.role}</span>
+                    <span class="sl-tag"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"></path></svg>Vouched</span>
+                  </div>
+                ))}
+              </div>
+            </Fragment>
+          )}
+          {s.n === '04' && (
+            <Fragment>
+              <p class="viz-label">Ongoing support</p>
+              <div class="timeline">
+                <span class="tl-track">
+                  <span class="tl-line"></span>
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <span class="dot"></span><span class="dot"></span><span class="dot dot--off"></span>
+                </span>
+                <span class="tl-label">Ongoing →</span>
+              </div>
+              <div class="support">
+                {support.map((t) => (
+                  <div class="sup-row">
+                    <svg class="check check--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"></path></svg>
+                    <span class="sup-text">{t}</span>
+                  </div>
+                ))}
+              </div>
+            </Fragment>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<noscript><style>.bar-fill{transform:none !important}</style></noscript>
+
+<style>
+  .hiw{
+    max-width:1280px; margin:0 auto; padding:var(--gb-section-y) var(--gb-gutter); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 820px;
+  }
+  .hiw-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .hiw-h2{
+    margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .hiw-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .hiw-intro{
+    margin:0 auto 56px; font-family:var(--gb-font-body); font-size:var(--gb-fs-lede); line-height:1.5;
+    color:var(--gb-muted); max-width:52ch; text-wrap:pretty;
+  }
+
+  .hiw-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px}
+
+  .step{
+    display:flex; flex-direction:column; text-align:center;
+    background:var(--gb-surface); border-radius:var(--gb-radius-lg); padding:32px 22px; box-shadow:var(--gb-shadow-card);
+  }
+  .step-num{
+    margin-bottom:12px; font-family:var(--gb-font-label); font-weight:500; font-size:14px;
+    letter-spacing:.08em; color:var(--gb-clay);
+  }
+  .step-title{
+    display:flex; align-items:center; justify-content:center; min-height:48px; margin:0 0 8px;
+    font-family:var(--gb-font-display); font-weight:400; font-size:20px; line-height:1.2;
+    letter-spacing:var(--gb-display-ls); color:var(--gb-ink);
+  }
+  .step-desc{
+    display:flex; align-items:center; justify-content:center; height:63px; margin:0 0 32px;
+    font-family:var(--gb-font-body); font-size:14px; line-height:1.5; color:var(--gb-muted);
+  }
+  .step-viz{height:184px; display:flex; flex-direction:column; justify-content:flex-start}
+  .viz-label{
+    margin:0 0 14px; text-align:left; font-family:var(--gb-font-label); font-weight:500; font-size:9px;
+    text-transform:uppercase; letter-spacing:.06em; color:var(--gb-muted);
+  }
+
+  /* shared light tile look */
+  .cal-day, .time, .cand, .sl-row, .sup-row{background:var(--gb-surface-tile); box-shadow:var(--gb-shadow-tile)}
+  .av{
+    flex:none; border-radius:50%; background:#F2E7D9; color:var(--gb-clay-dark);
+    font-family:var(--gb-font-label); font-weight:500; font-size:9px; display:flex; align-items:center; justify-content:center;
+    width:28px; height:28px;
+  }
+  .av--lg{width:32px; height:32px}
+  .check{flex:none; color:var(--gb-clay)}
+  .check--sm{width:13px; height:13px}
+
+  /* 01 — discovery call */
+  .cal-row{display:flex; gap:6px; justify-content:center}
+  .cal-day{flex:1; border-radius:12px; padding:18px 0}
+  .cal-dow{display:block; font-family:var(--gb-font-label); font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--gb-muted)}
+  .cal-date{display:block; margin-top:4px; font-family:var(--gb-font-body); font-size:17px; color:var(--gb-ink)}
+  .cal-day--on{background:var(--gb-clay); box-shadow:0 4px 10px rgba(185,107,77,.22)}
+  .cal-day--on .cal-dow, .cal-day--on .cal-date{color:var(--gb-paper)}
+  .time-row{display:flex; gap:5px; justify-content:center; margin-top:10px}
+  .time{flex:1; border-radius:9px; padding:8px 0; font-size:11px; color:var(--gb-muted)}
+  .time--on{background:var(--gb-clay); color:var(--gb-paper); box-shadow:0 4px 10px rgba(185,107,77,.22)}
+
+  /* 02 — assessment */
+  .cand{display:flex; align-items:center; gap:10px; border-radius:11px; padding:9px 11px; margin-bottom:16px; text-align:left}
+  .cand-name{font-family:var(--gb-font-body); font-weight:600; font-size:12px; color:var(--gb-ink)}
+  .cand-role{display:block; margin-top:2px; font-size:10px; color:var(--gb-muted)}
+  .bars{display:flex; flex-direction:column; gap:15px; padding:0 2px}
+  .bar{display:flex; align-items:center; gap:8px}
+  .bar-label{flex:none; width:78px; text-align:left; font-family:var(--gb-font-label); font-size:8px; text-transform:uppercase; letter-spacing:.03em; color:var(--gb-muted)}
+  .bar-track{flex:1; height:7px; background:#DDD2BF; border-radius:4px; overflow:hidden}
+  .bar-fill{
+    display:block; height:100%; width:var(--w); background:var(--gb-clay); border-radius:4px;
+    transform:scaleX(0); transform-origin:left; transition:transform .6s var(--gb-ease) .3s;
+  }
+  .step.is-revealed .bar-fill{transform:scaleX(1)}
+
+  /* 03 — shortlist */
+  .shortlist{display:flex; flex-direction:column; gap:8px}
+  .sl-row{display:flex; align-items:center; gap:10px; border-radius:11px; padding:8px 11px}
+  .sl-role{flex:1; text-align:left; font-size:12px; color:var(--gb-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .sl-tag{
+    flex:none; display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border-radius:999px;
+    font-family:var(--gb-font-label); text-transform:uppercase; letter-spacing:.04em; font-size:8px;
+    color:var(--gb-clay); background:rgba(185,107,77,.1);
+  }
+
+  /* 04 — ongoing support */
+  .timeline{display:flex; align-items:center; margin:0 2px 14px}
+  .tl-track{flex:1; display:flex; align-items:center; justify-content:space-between; position:relative}
+  .tl-line{position:absolute; left:2px; right:2px; top:50%; height:1px; background:var(--gb-hairline); transform:translateY(-50%)}
+  .dot{width:9px; height:9px; border-radius:50%; background:var(--gb-clay); position:relative; z-index:1}
+  .dot--off{opacity:.32}
+  .tl-label{margin-left:12px; white-space:nowrap; font-family:var(--gb-font-label); text-transform:uppercase; letter-spacing:.04em; font-size:8px; color:var(--gb-clay)}
+  .support{display:flex; flex-direction:column; gap:8px}
+  .sup-row{display:flex; align-items:center; gap:10px; border-radius:11px; padding:8px 11px}
+  .sup-text{flex:1; text-align:left; font-size:12px; color:var(--gb-ink)}
+
+  @media (max-width:1023px){
+    .hiw-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:768px){
+    .hiw{padding:72px 20px}
+    .hiw-h2{font-size:32px}
+    .hiw-intro{margin-bottom:40px}
+    .hiw-grid{grid-template-columns:1fr; gap:16px}
+    .step-title{min-height:0}
+    .step-desc{height:auto; margin-bottom:28px}
+    .step-viz{height:auto}
+  }
+</style>
