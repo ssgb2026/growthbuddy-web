@@ -1,0 +1,150 @@
+---
+/*
+  Fold 7 — Behind Every Match (reproduces "Fold 7 – Behind Every Match.html" / spec §3).
+  FAN-OUT + HOVER-LIFT — NOT a 3D flip (the flip lives on the About page; not here).
+
+  Cards start collapsed (opacity:0, translateY(40px)). On scroll-in (fan island,
+  IntersectionObserver threshold 0.2) each animates to its data-fanpose, staggered
+  200 + i*70 ms; hover is wired only after the last card lands. Hover a card →
+  translateY(-26px) rotate(<its fan angle, parsed from data-fanpose>) scale(1.07),
+  opacity 1, z-index 10, big shadow; the rest → opacity .42, their fanpose, small
+  shadow. Container mouseleave → all restore. reduced-motion → fan in instantly,
+  hover still wired. Stacks (no fan) ≤820px.
+
+  Smoothness: reveal/hover animate transform + opacity (compositor); the hover
+  box-shadow is occasional/user-triggered. Header reveal via the shared
+  [data-reveal] hook. Cards have NO border (--gb-shadow-fan); backgrounds from the
+  multi-hue tint tokens (--gb-tint-*-bg), excluded from the greige pass. Paper bg +
+  global PNG grain. content-visibility:auto. Copy verbatim from the mock.
+*/
+const cards = [
+  { fanpose: 'rotate(-16deg) translateY(26px)', tint: 'sage',  chip: '#C6DACC', title: 'Role-specific testing',   desc: 'Real tasks for the actual job, scored.',      icon: '<path d="M4 12.5l5 5 11-11"></path>' },
+  { fanpose: 'rotate(-9deg) translateY(8px)',   tint: 'olive', chip: '#D4D5B0', title: 'Culture-fit assurance',   desc: 'Checked against how your team works.',         icon: '<circle cx="9" cy="8" r="3"></circle><path d="M3.5 19c0-3.1 2.5-5.2 5.5-5.2s5.5 2.1 5.5 5.2"></path><circle cx="17.5" cy="9.2" r="2.3"></circle><path d="M16 14.4c2.4.3 4.5 2 4.5 4.6"></path>' },
+  { fanpose: 'rotate(-3deg)',                   tint: 'wheat', chip: '#E6D4A0', title: 'Payroll processing',      desc: 'Contracts, taxes, and pay — all handled.',     icon: '<rect x="3.2" y="6" width="17.6" height="12" rx="2.6"></rect><path d="M3.4 9.4h11.2a2 2 0 0 1 2 2"></path><path d="M16.6 12.4h2.2"></path>' },
+  { fanpose: 'rotate(3deg)',                    tint: 'sand',  chip: '#EBCBA4', title: 'Monthly check-ins',       desc: 'We talk to both sides, monthly.',              icon: '<path d="M5 12a7 7 0 0 1 11.6-5.2L18 8"></path><polyline points="18 4 18 8 14 8"></polyline><path d="M19 12a7 7 0 0 1-11.6 5.2L6 16"></path><polyline points="6 20 6 16 10 16"></polyline>' },
+  { fanpose: 'rotate(9deg) translateY(8px)',    tint: 'clay',  chip: '#E6C4B0', title: 'Ongoing coaching',        desc: 'We help them keep getting better.',            icon: '<polyline points="4 16 10 10 13 13 20 6"></polyline><polyline points="15 6 20 6 20 11"></polyline>' },
+  { fanpose: 'rotate(16deg) translateY(26px)',  tint: 'rose',  chip: '#DEC1BE', title: 'Performance management',  desc: 'We step in when something slips.',             icon: '<line x1="3.5" y1="20" x2="20.5" y2="20"></line><line x1="6.5" y1="20" x2="6.5" y2="13"></line><line x1="12" y1="20" x2="12" y2="6.5"></line><line x1="17.5" y1="20" x2="17.5" y2="15"></line>' },
+];
+---
+<section class="bem" aria-labelledby="bem-title">
+  <p class="bem-eyebrow" data-reveal data-delay="0">Behind every match</p>
+  <h2 class="bem-h2" id="bem-title" data-reveal data-delay="80">The work that makes a hire <em>last</em></h2>
+  <p class="bem-intro" data-reveal data-delay="160">We go above and beyond to ensure the relationship continues to work for everyone involved.</p>
+
+  <div class="fan" data-fan>
+    {cards.map((c, i) => (
+      <article class="card" data-card data-i={String(i)} data-fanpose={c.fanpose} style={`background:var(--gb-tint-${c.tint}-bg)`}>
+        <div class="card-chip" style={`background:${c.chip}`}>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><Fragment set:html={c.icon} /></svg>
+        </div>
+        <div class="card-title">{c.title}</div>
+        <div class="card-divider"></div>
+        <div class="card-desc">{c.desc}</div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<noscript><style>.card{opacity:1 !important; transform:none !important; margin:0 6px !important}</style></noscript>
+
+<style>
+  .bem{
+    max-width:1100px; margin:0 auto; padding:clamp(72px,10vw,120px) 24px; text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 620px;
+  }
+  .bem-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .bem-h2{
+    margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .bem-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .bem-intro{
+    margin:0 auto; font-family:var(--gb-font-body); font-weight:400; font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted); max-width:48ch; text-wrap:pretty;
+  }
+
+  .fan{display:flex; justify-content:center; align-items:flex-start; min-height:340px; padding-top:30px; margin-top:clamp(40px,5vw,56px)}
+  .card{
+    position:relative; width:148px; height:212px; border-radius:18px; padding:20px; margin:0 -30px; flex:none;
+    transform-origin:bottom center; text-align:left; display:flex; flex-direction:column;
+    box-shadow:var(--gb-shadow-fan);
+    transition:transform .45s var(--gb-ease), opacity .45s var(--gb-ease), box-shadow .45s var(--gb-ease);
+    opacity:0; transform:translateY(40px); /* collapsed; the fan island animates to data-fanpose */
+  }
+  .card-chip{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex:none; margin-bottom:auto}
+  .card-chip svg{stroke:#2E2A26}
+  .card-title{margin-top:14px; font-family:var(--gb-font-body); font-weight:600; font-size:17px; line-height:1.25; color:var(--gb-ink)}
+  .card-divider{height:1px; background:rgba(0,0,0,.10); margin:12px 0}
+  .card-desc{font-size:13px; line-height:1.4; color:#4A4D52}
+
+  @media (max-width:820px){
+    .fan{flex-direction:column; align-items:center; gap:16px; padding-top:0; min-height:0}
+    .card{transform:none !important; opacity:1 !important; margin:0 !important; width:100% !important; max-width:340px !important; height:auto !important}
+    .card-chip{margin-bottom:14px !important}
+    .bem-h2{font-size:32px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .card{transition:none !important}
+  }
+</style>
+
+<script>
+  // Fan island — scroll-in fan-out + hover-lift (spec §3 reveal/wireHover/restore).
+  const fan = document.querySelector('[data-fan]');
+  if (fan) {
+    const cards = Array.from(fan.querySelectorAll<HTMLElement>('[data-card]'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pose = (c: HTMLElement) => c.getAttribute('data-fanpose') || '';
+    const rot = (c: HTMLElement) => (pose(c).match(/rotate\(([^)]+)\)/) || [, '0deg'])[1];
+
+    let wired = false;
+    const wireHover = () => {
+      if (wired) return; wired = true;
+      cards.forEach((card) => {
+        card.addEventListener('mouseenter', () => {
+          cards.forEach((c) => {
+            if (c === card) {
+              c.style.opacity = '1';
+              c.style.transform = `translateY(-26px) rotate(${rot(c)}) scale(1.07)`;
+              c.style.zIndex = '10';
+              c.style.boxShadow = '0 26px 50px rgba(0,0,0,0.16)';
+            } else {
+              c.style.opacity = '0.42';
+              c.style.transform = pose(c);
+              c.style.zIndex = '';
+              c.style.boxShadow = ''; // back to --gb-shadow-fan
+            }
+          });
+        });
+      });
+      fan.addEventListener('mouseleave', () => {
+        cards.forEach((c) => { c.style.opacity = '1'; c.style.transform = pose(c); c.style.zIndex = ''; c.style.boxShadow = ''; });
+      });
+    };
+
+    const fanOut = (instant: boolean) => {
+      cards.forEach((c, i) => {
+        const go = () => { c.style.opacity = '1'; c.style.transform = pose(c); };
+        if (instant) go(); else window.setTimeout(go, 200 + i * 70);
+      });
+      if (instant) wireHover();
+      else window.setTimeout(wireHover, 200 + cards.length * 70 + 460);
+    };
+
+    if (reduced) {
+      fanOut(true);
+    } else {
+      let done = false;
+      let io: IntersectionObserver | undefined;
+      const trigger = () => { if (done) return; done = true; if (io) io.disconnect(); fanOut(false); };
+      if ('IntersectionObserver' in window) {
+        io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) trigger(); }), { threshold: 0.2 });
+        io.observe(fan);
+      } else { trigger(); }
+      window.setTimeout(trigger, 1200); // safety net — never leave cards hidden
+    }
+  }
+</script>

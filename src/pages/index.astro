@@ -8,6 +8,7 @@ import Compare from '../components/home/Compare.astro';
 import HowItWorks from '../components/home/HowItWorks.astro';
 import Roles from '../components/home/Roles.astro';
 import Proof from '../components/home/Proof.astro';
+import BehindEveryMatch from '../components/home/BehindEveryMatch.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
@@ -33,10 +34,13 @@ import Proof from '../components/home/Proof.astro';
   {/* Fold 6 — The Results / Proof (stats + testimonial accordion). */}
   <Proof />
 
+  {/* Fold 7 — Behind Every Match (fan-out cards + hover-lift). */}
+  <BehindEveryMatch />
+
   {/*
     Remaining homepage folds — built one at a time into src/components/home/:
-      7  Behind Every Match  9  Team & FAQ
       8  Pricing             10 Final CTA & Footer
+      9  Team & FAQ
   */}
 </BaseLayout>
 
