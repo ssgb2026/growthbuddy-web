@@ -45,7 +45,8 @@ const { variant = 'gold', label, href } = Astro.props;
   }
   .cta:hover .button-outer{box-shadow:0 0 0 0 rgba(var(--sh),1), 0 0 0 0 rgba(var(--sh),.5), 0 0 0 0 rgba(var(--sh),.25)}
   .cta .button-inner{
-    position:relative; z-index:1; border-radius:inherit; padding:0.92em 1.5em;
+    position:relative; z-index:1; border-radius:inherit; padding:0.92em 1.6em 0.92em 1.25em;
+    display:flex; align-items:center; justify-content:center; /* centre content; no line-box strut */
     background-image:linear-gradient(135deg, var(--g1), var(--g2));
     transition:box-shadow 300ms ease, clip-path 250ms ease, transform 250ms ease;
     overflow:clip; clip-path:inset(0 0 0 0 round 999vw);
@@ -61,13 +62,13 @@ const { variant = 'gold', label, href } = Astro.props;
   }
   .cta:hover .cta-content{transform:scale(0.975)}
   .cta-label{
-    font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600; font-size:17px;
+    font-family:var(--gb-font-body); letter-spacing:-0.02em; font-weight:600; font-size:17px; line-height:1.2;
     color:transparent; background-image:linear-gradient(135deg, var(--txt1), var(--txt2));
     -webkit-background-clip:text; background-clip:text;
   }
   /* Arrow in a transparent-fill ring; ring + arrow share weight & colour, so the
      pill's gradient shows through the circle. */
-  .cta-arrow{flex:none; width:22px; height:22px; color:var(--gb-cta-txt-1)}
+  .cta-arrow{display:block; flex:none; width:22px; height:22px; color:var(--gb-cta-txt-1)}
   .cta:active .button-inner{transform:scale(0.975)}
   .cta:focus-visible{outline:var(--gb-focus); outline-offset:3px}
 </style>
