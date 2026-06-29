@@ -1,0 +1,174 @@
+---
+/*
+  Fold 6 — The Results / Proof (reproduces "Fold 6 – The Results.html" / spec §5).
+  Two parts: a stat block, then an interactive testimonial accordion.
+
+  Accordion (spec §5 setActive): a row of flex panels. Clicking panel i sets it
+  flex-grow:4.4 and the rest 1.15 (CSS transition on flex animates the widths);
+  expanded content [data-exp] fades to opacity 1, the collapsed label [data-col]
+  to 0 (reversed when inactive). Active = cursor:default; inactive = cursor:pointer
+  and a raised shadow on hover. Below 820px the panels stack, all expanded.
+
+  Island: a tiny click/keyboard handler toggles data-active; CSS does the flex /
+  opacity / cursor / hover-shadow. Still clickable under reduced-motion (the global
+  reduced-motion rule just removes the transitions). flex-grow + hover box-shadow
+  are user-triggered, occasional, row-scoped transitions — not scroll/continuous —
+  so they don't violate the per-frame budget. Reveal via the shared [data-reveal]
+  hook. Paper bg + global PNG grain. content-visibility:auto below the fold.
+
+  Copy/numbers verbatim from the mock EXCEPT one brand-rule fix: Permin's quote
+  said "in Germany" — reworded to "locally" (no country mentions allowed).
+*/
+const stats = [
+  { n: '3 weeks', label: 'to make a hire' },
+  { n: '60%', label: 'Lower cost than a local hire' },
+  { n: '~2 years', label: 'average tenure' },
+];
+const panels = [
+  {
+    name: 'Joseph Robins', role: 'COO • Archa', company: 'Archa',
+    photo: 'joseph-robins.webp', logo: 'archa.png', logoW: 298, logoH: 79, logoH_css: 24,
+    quote: '“We finally gained a complete view of our social channels along with a 30% increase in website visitors and 25% improvement in marketing spend efficiency – we can’t put a price on that.”',
+  },
+  {
+    name: 'Permin Rehm', role: 'CEO • Altitude Marketplaces', company: 'Altitude',
+    photo: 'permin-rehm.webp', logo: 'altitude.png', logoW: 222, logoH: 47, logoH_css: 22,
+    quote: '“Partnering with Growthbuddy has been one of the best investments in the last 12 months. They’ve found me a gem I’d have struggled to find or afford locally.”',
+  },
+  {
+    name: 'Ben Cyzer', role: 'Founder • 3DCtrl', company: '3DCtrl',
+    photo: 'ben-cyzer.webp', logo: '3dctrl.png', logoW: 307, logoH: 75, logoH_css: 24,
+    quote: '“Growthbuddy is the best place to start if you want to find committed, smart, and high-value candidates – they work hard and smart to ensure you get the best value and service.”',
+  },
+];
+---
+<section class="proof-stats" aria-labelledby="results-title">
+  <p class="proof-eyebrow" data-reveal data-delay="0">The results</p>
+  <h2 class="proof-h2" id="results-title" data-reveal data-delay="80">Hire faster, spend less,<br />keep them <em>longer</em></h2>
+  <div class="stats">
+    {stats.map((s, i) => (
+      <div class="stat" data-reveal data-delay={String(160 + i * 120)}>
+        <div class="stat-n">{s.n}</div>
+        <div class="stat-l">{s.label}</div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="proof-quotes" aria-label="In their words">
+  <div class="accordion" data-accordion data-reveal>
+    {panels.map((p, i) => (
+      <article class="acc-panel" data-panel data-i={String(i)} tabindex="0" data-active={i === 0 ? '' : undefined}>
+        <div class="exp">
+          <div class="exp-photo"><img src={`/img/testimonials/${p.photo}`} alt={p.name} width="500" height="500" loading="lazy" /></div>
+          <div class="exp-body">
+            <img class="exp-logo" src={`/img/testimonials/${p.logo}`} alt={p.company} width={p.logoW} height={p.logoH} style={`height:${p.logoH_css}px`} loading="lazy" />
+            <blockquote class="exp-quote">{p.quote}</blockquote>
+            <div>
+              <div class="exp-name">{p.name}</div>
+              <div class="exp-role">{p.role}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col-label">{p.company}</div>
+          <img class="col-photo" src={`/img/testimonials/${p.photo}`} alt={p.name} width="500" height="500" loading="lazy" />
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .proof-stats{
+    max-width:1000px; margin:0 auto; padding:clamp(72px,10vw,120px) 24px clamp(48px,6vw,64px); text-align:center;
+    content-visibility:auto; contain-intrinsic-size:0 420px;
+  }
+  .proof-eyebrow{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .proof-h2{
+    margin:0 auto clamp(40px,5vw,56px); max-width:18ch; font-family:var(--gb-font-display); font-weight:700;
+    font-size:var(--gb-fs-title); line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink);
+  }
+  .proof-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+
+  .stats{display:flex; justify-content:center; flex-wrap:wrap; gap:24px 72px}
+  .stat-n{font-family:var(--gb-font-display); font-weight:400; font-size:44px; line-height:1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink)}
+  .stat-l{margin-top:12px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow); text-transform:uppercase; letter-spacing:.05em; font-size:14px; color:var(--gb-clay)}
+
+  .proof-quotes{
+    max-width:1760px; margin:0 auto; padding:0 clamp(20px,4vw,56px) clamp(80px,10vw,128px);
+    content-visibility:auto; contain-intrinsic-size:0 420px;
+  }
+  .accordion{display:flex; gap:16px; height:330px; align-items:stretch; text-align:left}
+
+  .acc-panel{
+    position:relative; overflow:hidden; border-radius:var(--gb-radius-xl);
+    flex-grow:1.15; flex-basis:0; min-width:0; background:var(--gb-surface); cursor:pointer;
+    box-shadow:var(--gb-shadow-panel);
+    transition:flex-grow .6s var(--gb-ease), box-shadow .45s ease;
+  }
+  .acc-panel[data-active]{flex-grow:4.4; cursor:default}
+  .acc-panel:not([data-active]):hover{box-shadow:0 16px 36px rgba(0,0,0,.16)}
+  .acc-panel:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+
+  .exp{
+    position:absolute; inset:0; opacity:0; transition:opacity .45s ease; pointer-events:none;
+    display:flex; align-items:center; gap:48px; padding:48px 64px 48px 48px;
+  }
+  .acc-panel[data-active] .exp{opacity:1}
+  .exp-photo{flex:none; width:156px; display:flex; align-items:center; justify-content:center}
+  .exp-photo img{width:156px; height:auto; display:block}
+  .exp-body{flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center}
+  .exp-logo{width:auto; object-fit:contain; align-self:flex-start; opacity:.92}
+  .exp-quote{
+    margin:22px 0; max-width:30ch; font-family:var(--gb-font-display); font-weight:400;
+    font-size:clamp(16px,1.35vw,21px); line-height:1.42; letter-spacing:-0.3px; color:var(--gb-ink-warm); text-wrap:pretty;
+  }
+  .exp-name{font-family:var(--gb-font-body); font-weight:600; font-size:16px; color:var(--gb-ink)}
+  .exp-role{margin-top:6px; font-family:var(--gb-font-label); font-weight:400; text-transform:uppercase; letter-spacing:.08em; font-size:13px; color:var(--gb-meta)}
+
+  .col{
+    position:absolute; inset:0; opacity:1; transition:opacity .4s ease;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 16px;
+  }
+  .acc-panel[data-active] .col{opacity:0}
+  .col-label{margin-bottom:18px; text-align:center; font-family:var(--gb-font-label); font-weight:400; text-transform:uppercase; letter-spacing:.1em; font-size:12px; color:var(--gb-meta)}
+  .col-photo{width:156px; max-width:100%; height:auto; display:block}
+
+  @media (max-width:768px){
+    .proof-stats{padding:72px 20px}
+    .proof-h2{font-size:32px}
+    .stats{gap:30px}
+    .stat-n{font-size:38px}
+    .proof-quotes{padding:0 18px 72px}
+  }
+  @media (max-width:820px){
+    .accordion{flex-direction:column; height:auto; gap:16px}
+    .acc-panel{flex-grow:1; min-height:300px; cursor:default}
+    .acc-panel .exp{opacity:1; position:relative; align-items:center; padding:32px 28px; gap:24px}
+    .acc-panel .col{display:none}
+    .exp-photo, .exp-photo img{width:130px}
+  }
+</style>
+
+<script>
+  // Accordion island — click/keyboard toggles data-active; CSS handles the rest.
+  const acc = document.querySelector('[data-accordion]');
+  if (acc) {
+    const panels = Array.from(acc.querySelectorAll<HTMLElement>('[data-panel]'));
+    const setActive = (p: HTMLElement) => {
+      if (p.hasAttribute('data-active')) return;
+      panels.forEach((q) => q.removeAttribute('data-active'));
+      p.setAttribute('data-active', '');
+    };
+    panels.forEach((p) => {
+      p.addEventListener('click', () => setActive(p));
+      p.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(p); }
+      });
+    });
+  }
+</script>
