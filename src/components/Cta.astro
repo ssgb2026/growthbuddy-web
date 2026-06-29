@@ -12,12 +12,12 @@ const { variant = 'gold', label, href } = Astro.props;
 <a class={`cta cta--${variant}`} href={href}>
   <div class="button-outer"><div class="button-inner">
     <span class="cta-content">
-      <span class="cta-label">{label}</span>
-      <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="8" y1="12" x2="14.5" y2="12"></line>
         <polyline points="12 9.5 15 12 12 14.5"></polyline>
       </svg>
+      <span class="cta-label">{label}</span>
     </span>
   </div></div>
 </a>
