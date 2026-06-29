@@ -1,26 +1,89 @@
 ---
+/*
+  Site footer (§B.2 / §B.16) — reproduces the Fold 10 standalone footer. Rendered
+  once site-wide via BaseLayout (not duplicated in FinalCta). Outline-pill wordmark,
+  brand blurb, Explore/Company link groups (Space Grotesk uppercase clay headings,
+  ink links → clay on hover), bottom bar. 2 columns ≤760px. Capital-G Growthbuddy;
+  no country references.
+*/
 const year = new Date().getFullYear();
+const explore = [
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Roles', href: '/hire' },
+  { label: 'Client stories', href: '#proof' },
+];
+const company = [
+  { label: 'Book a call', href: '/book-a-call' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/about' },
+];
 ---
-<footer style="border-top:1px solid var(--gb-hairline);margin-top:120px;">
-  <div class="container" style="padding-block:48px;display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;">
-    <div style="max-width:30ch;">
-      <div style="font-weight:600;font-size:18px;">Growthbuddy</div>
-      <p style="color:var(--gb-muted);font-size:15px;margin-top:12px;">Remote hiring for US companies, done properly — and looked after long after the hire.</p>
+<footer class="ft">
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <span class="ft-wordmark">Growthbuddy</span>
+      <p class="ft-blurb">We find highly capable people globally, vet them deeply and manage their performance after they join your team.</p>
     </div>
-    <nav aria-label="Footer" style="display:flex;gap:48px;font-size:15px;">
-      <div><strong style="font-family:var(--gb-font-label);text-transform:uppercase;font-size:14px;color:var(--gb-clay);">Explore</strong>
-        <ul style="list-style:none;margin-top:12px;display:grid;gap:8px;">
-          <li><a href="/how-it-works">How it works</a></li><li><a href="/pricing">Pricing</a></li>
-          <li><a href="/hire">Roles</a></li><li><a href="/industries">Industries</a></li>
-        </ul></div>
-      <div><strong style="font-family:var(--gb-font-label);text-transform:uppercase;font-size:14px;color:var(--gb-clay);">Company</strong>
-        <ul style="list-style:none;margin-top:12px;display:grid;gap:8px;">
-          <li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/book-a-call">Book a call</a></li>
-        </ul></div>
+
+    <nav class="ft-col" aria-label="Explore">
+      <h2 class="ft-heading">Explore</h2>
+      {explore.map((l) => (<a class="ft-link" href={l.href}>{l.label}</a>))}
+    </nav>
+
+    <nav class="ft-col" aria-label="Company">
+      <h2 class="ft-heading">Company</h2>
+      {company.map((l) => (<a class="ft-link" href={l.href}>{l.label}</a>))}
     </nav>
   </div>
-  <div class="container" style="border-top:1px solid var(--gb-hairline);padding-block:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--gb-muted);">
-    <span>© {year} Growthbuddy. All rights reserved.</span>
-    <span><a href="/privacy">Privacy</a> &nbsp;·&nbsp; <a href="/terms">Terms</a></span>
+
+  <div class="ft-bottom">
+    <span>© {year} Growthbuddy Limited. All rights reserved.</span>
+    <div class="ft-legal">
+      <a class="ft-link-legal" href="/privacy">Privacy</a>
+      <a class="ft-link-legal" href="/terms">Terms</a>
+    </div>
   </div>
 </footer>
+
+<style>
+  .ft{position:relative; z-index:2; margin-top:120px; border-top:var(--gb-border-hairline)}
+  .ft-grid{
+    max-width:var(--gb-container); margin:0 auto; padding:64px 24px 0;
+    display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px;
+  }
+  .ft-wordmark{
+    display:inline-block; font-family:var(--gb-font-body); font-weight:600; font-size:18px; color:var(--gb-ink);
+    border:1.5px solid var(--gb-ink); border-radius:var(--gb-radius-pill); padding:7px 16px;
+  }
+  .ft-blurb{margin-top:18px; max-width:30ch; font-family:var(--gb-font-body); font-size:15px; line-height:1.5; color:var(--gb-muted)}
+
+  .ft-col{display:flex; flex-direction:column}
+  .ft-heading{
+    margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:14px; color:var(--gb-clay);
+  }
+  .ft-link{
+    margin-bottom:11px; font-family:var(--gb-font-body); font-size:15px; color:var(--gb-ink); text-decoration:none;
+    transition:color .2s ease;
+  }
+  .ft-link:hover{color:var(--gb-clay)}
+
+  .ft-bottom{
+    max-width:var(--gb-container); margin:48px auto 0; padding:22px 24px 40px; border-top:var(--gb-border-hairline);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--gb-font-body); font-size:13px; color:var(--gb-muted);
+  }
+  .ft-link-legal{margin-left:20px; color:var(--gb-muted); text-decoration:none; transition:color .2s ease}
+  .ft-link-legal:hover{color:var(--gb-clay)}
+
+  .ft-link:focus-visible, .ft-link-legal:focus-visible, .ft-wordmark:focus-visible{outline:var(--gb-focus); outline-offset:3px}
+
+  @media (max-width:760px){
+    .ft{margin-top:80px}
+    .ft-grid{grid-template-columns:1fr 1fr; gap:32px}
+    .ft-brand{grid-column:1 / -1}
+    .ft-bottom{flex-direction:column}
+    .ft-legal a{margin-left:0; margin-right:20px}
+  }
+</style>

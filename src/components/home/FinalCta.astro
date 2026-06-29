@@ -1,0 +1,112 @@
+---
+/*
+  Fold 10 (final CTA) — reproduces the final-CTA panel + testimonial from
+  "Fold 10 – Final CTA & Footer (standalone).html" (spec §2/§9). The footer is the
+  site-wide Footer.astro (rebuilt to this mock), not duplicated here.
+
+  Testimonial: the scroll-ink statement returns with IDENTICAL mechanics to Fold 2
+  (the shared _scrollInk island, incl. the clay-word colour lerp). The author block
+  + CTA panel do the standard [data-reveal] reveal. Primary CTA = the on-paper
+  neumorphic clay variant (--gb-cta-clay-*) via the shared <Cta>. Paper bg + global
+  PNG grain. Copy verbatim.
+*/
+import Cta from '../Cta.astro';
+
+const quote = [
+  { t: '"Growthbuddy' }, { t: 'make' }, { t: 'recruitment' }, { t: 'look' }, { t: 'easy!' },
+  { t: 'Avani' }, { t: 'and' }, { t: 'the' }, { t: 'team' },
+  { t: "don't", c: 1 }, { t: 'leave', c: 1 }, { t: 'any', c: 1 }, { t: 'stone', c: 1 }, { t: 'unturned', c: 1 },
+  { t: 'in' }, { t: 'the' }, { t: 'process' }, { t: 'and' }, { t: 'always' }, { t: 'deliver.' }, { t: 'I' }, { t: 'am' },
+  { t: 'super', c: 1 }, { t: 'impressed', c: 1 }, { t: 'and' }, { t: 'wholeheartedly', c: 1 }, { t: 'recommend', c: 1 }, { t: 'it!"' },
+];
+const reassure = ['No upfront fee', 'Pay only while they stay', 'Replacement guaranteed'];
+---
+<section class="fc-quote" aria-label="Client testimonial">
+  <div class="fc-quote-inner">
+    <p class="fc-stmt" data-ink>
+      {quote.map((q) => (<span class="fc-word" data-word data-clay={q.c ? '' : undefined}>{q.t + ' '}</span>))}
+    </p>
+    <div class="fc-author" data-reveal>
+      <p class="fc-author-name">Sophia Livesey</p>
+      <p class="fc-author-role">Chief of Staff • Spekk</p>
+    </div>
+  </div>
+</section>
+
+<div class="fc-ctawrap">
+  <div class="fc-cta" data-reveal>
+    <div class="fc-glow" aria-hidden="true"></div>
+    <p class="fc-eyebrow">Get started</p>
+    <h2 class="fc-h2">Let's find your next team <em>member</em></h2>
+    <p class="fc-lead">Tell us what you need. We'll do the hard part — and stay with you after the hire.</p>
+    <Cta variant="clay" label="Start your search →" href="/book-a-call" />
+    <div class="fc-reassure">
+      {reassure.map((r) => (
+        <span class="fc-reassure-item">
+          <svg class="fc-check" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.4 12.4l2.4 2.4 4.6-5.1"></path></svg>
+          {r}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<noscript><style>.fc-word{opacity:1 !important} .fc-word[data-clay]{color:var(--gb-clay) !important}</style></noscript>
+
+<style>
+  .fc-quote{padding:clamp(96px,12vw,140px) 0 clamp(80px,9vw,110px)}
+  .fc-quote-inner{max-width:880px; margin:0 auto; padding:0 32px; text-align:center}
+  .fc-stmt{
+    margin:0; font-family:var(--gb-font-display); font-weight:400; font-size:var(--gb-fs-statement);
+    line-height:1.46; letter-spacing:var(--gb-display-ls); text-align:center;
+  }
+  /* scroll-ink words rest dim; the shared island inks them on scroll */
+  .fc-word{color:var(--gb-ink); opacity:.2}
+
+  .fc-author{margin-top:44px}
+  .fc-author-name{margin:0; font-family:var(--gb-font-body); font-weight:600; font-size:17px; letter-spacing:-0.01em; color:var(--gb-ink)}
+  .fc-author-role{margin:6px 0 0; font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:.08em; font-size:13px; color:var(--gb-muted)}
+
+  .fc-ctawrap{max-width:1200px; margin:0 auto; padding:0 24px}
+  .fc-cta{
+    position:relative; overflow:hidden; max-width:920px; margin:0 auto; text-align:center;
+    background:var(--gb-surface); border-radius:var(--gb-radius-2xl); padding:84px 48px; box-shadow:var(--gb-shadow-card);
+  }
+  .fc-glow{
+    position:absolute; width:420px; height:420px; border-radius:50%; top:-180px; right:-120px; pointer-events:none;
+    background:radial-gradient(circle, rgba(185,107,77,0.14), transparent 70%);
+  }
+  .fc-eyebrow{
+    position:relative; margin:0 0 16px; font-family:var(--gb-font-label); font-weight:var(--gb-weight-eyebrow);
+    text-transform:uppercase; letter-spacing:var(--gb-eyebrow-ls); font-size:var(--gb-fs-eyebrow); color:var(--gb-clay);
+  }
+  .fc-h2{
+    position:relative; margin:0 0 16px; font-family:var(--gb-font-display); font-weight:700; font-size:var(--gb-fs-title);
+    line-height:1.1; letter-spacing:var(--gb-title-ls); color:var(--gb-ink); text-wrap:balance;
+  }
+  .fc-h2 em{font-style:italic; font-weight:400; color:var(--gb-clay)}
+  .fc-lead{
+    position:relative; margin:0 auto 40px; max-width:46ch; font-family:var(--gb-font-body); font-size:var(--gb-fs-lede);
+    line-height:1.5; color:var(--gb-muted);
+  }
+  .fc-cta :global(.cta){position:relative}
+
+  .fc-reassure{
+    position:relative; margin-top:22px; display:flex; gap:10px 24px; justify-content:center; flex-wrap:wrap;
+  }
+  .fc-reassure-item{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--gb-font-label); font-weight:500; text-transform:uppercase; letter-spacing:.5px; font-size:14px; color:var(--gb-muted);
+  }
+  .fc-check{flex:none; width:18px; height:18px; stroke:var(--gb-clay)}
+
+  @media (max-width:768px){
+    .fc-ctawrap{padding:0 20px}
+    .fc-cta{padding:56px 26px; border-radius:22px}
+    .fc-h2{font-size:32px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .fc-word{opacity:1}
+    .fc-word[data-clay]{color:var(--gb-clay)}
+  }
+</style>

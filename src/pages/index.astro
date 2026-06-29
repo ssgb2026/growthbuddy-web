@@ -11,6 +11,7 @@ import Proof from '../components/home/Proof.astro';
 import BehindEveryMatch from '../components/home/BehindEveryMatch.astro';
 import Pricing from '../components/home/Pricing.astro';
 import TeamFaq from '../components/home/TeamFaq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
 ---
 <BaseLayout title="Hire sharper talent without hiring locally">
   <Grain />
@@ -45,10 +46,8 @@ import TeamFaq from '../components/home/TeamFaq.astro';
   {/* Team & FAQ (founder team + accordion FAQ). */}
   <TeamFaq />
 
-  {/*
-    Remaining homepage folds — built one at a time into src/components/home/:
-      10 Final CTA & Footer
-  */}
+  {/* Final CTA + testimonial (the site Footer follows, from BaseLayout). */}
+  <FinalCta />
 </BaseLayout>
 
 <style>
